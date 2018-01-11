@@ -82,6 +82,7 @@ def train_mode(gen, dis):
 		for i, data in enumerate(trainLoader, 0):
 
 			# add a small amount of corruption to the data
+			print data.size()
 			xReal = Variable(data[0])
 			xReal = corrupt(xReal, noiseLevel)  #adds gaussain noise (x should be in [-1, 1])
 
