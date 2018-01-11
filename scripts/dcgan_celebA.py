@@ -79,17 +79,13 @@ def train_mode(gen, dis):
 
 			# add a small amount of corruption to the data
 			xReal = Variable(data[0])
-		
-			# random latent sample
-			z = Variable(gen.sample_z(xReal.size(0)))
-
-			# make cuda
 			if gen.useCUDA:
 				xReal = xReal.cuda()
-				z = z.cuda()
+
 
 			####### Calculate discriminator loss #######
-			xFake = gen.forward(z)
+			noSamples = xReal.size(0)
+			xFake = gen.sample_x(noSamples)
 			pReal_D = dis.forward(xReal)
 			pFake_D = dis.forward(xFake.detach())
 
@@ -100,8 +96,7 @@ def train_mode(gen, dis):
 						F.binary_cross_entropy(pFake_D, fake))
 
 			####### Calculate generator loss #######
-			z_ = Variable(gen.sample_z(xReal.size(0))).type_as(z)
-			xFake_ = gen.forward(z_)
+			xFake_ = gen.sample_x(noSamples)
 			pFake_G = dis.forward(xFake_)
 			genLoss = F.binary_cross_entropy(pFake_G, real)
 
@@ -134,11 +129,7 @@ def train_mode(gen, dis):
 		gen.eval()
 		print 'Outputs will be saved to:',exDir
 		#save some samples
-		z = Variable(gen.sample_z(49))
-		if gen.useCUDA:
-				z = z.cuda()
-
-		samples = gen.gen(z)
+		samples = gen.sample_x(49)
 		save_image(samples.data, join(exDir,'epoch'+str(e)+'.png'))
 
 		#plot
