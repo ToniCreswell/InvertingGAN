@@ -37,7 +37,7 @@ EPSILON = 1e-6
 
 def get_args():
 	parser = argparse.ArgumentParser()
-	parser.add_argument('--root', default='../../../data/', type=str)
+	parser.add_argument('--root', default='../../../../data/', type=str)
 	parser.add_argument('--batchSize', default=64, type=int)
 	parser.add_argument('--maxEpochs', default=10, type=int)
 	parser.add_argument('--nz', default=200, type=int)
@@ -179,7 +179,7 @@ if __name__=='__main__':
 	###### Create model #####
 	IM_SIZE = 64
 
-	gen = GEN(imSize=IM_SIZE, nz=opts.nz, prior=torch.randn, fSize=opts.fSize)
+	gen = GEN(imSize=IM_SIZE, nz=opts.nz, fSize=opts.fSize)
 	dis = DIS (imSize=IM_SIZE, fSize=opts.fSize)
 
 	if opts.loadModel:
