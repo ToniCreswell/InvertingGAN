@@ -76,14 +76,14 @@ def train_mode(gen, dis):
 		epochLoss_dis = 0
 
 		noiseLevel = noiseSigma[e]
-		print 'noise level:', noiseLevel
+		print 'noise level:', noiseLevel, type(noiseLevel)
 
 		T = time()
 		for i, data in enumerate(trainLoader, 0):
 
 			# add a small amount of corruption to the data
 			xReal = Variable(data[0])
-			xReal = corrupt(xReal)  #adds gaussain noise (x should be in [-1, 1])
+			xReal = corrupt(xReal, noiseLevel)  #adds gaussain noise (x should be in [-1, 1])
 
 			# random latent sample
 			z = Variable(gen.sample_z(xReal.size(0)))
@@ -126,10 +126,11 @@ def train_mode(gen, dis):
 			epochLoss_dis += disLoss.data[0]
 
 			####### Print info #######
+			i+=1
 			print '[%d, %d] gen: %.5f, dis: %.5f, time: %.2f' \
 			% (e, i, epochLoss_gen/i, epochLoss_dis/i, time()-T)
 
-		i+=1
+		
 		print '[%d, %d] gen: %.5f, dis: %.5f, time: %.2f' \
 				% (e, i, epochLoss_gen/i, epochLoss_dis/i, time()-T)
 
