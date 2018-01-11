@@ -83,7 +83,7 @@ def train_mode(gen, dis):
 
 			# add a small amount of corruption to the data
 			xReal = Variable(data[0])
-			xReal = corrupt(xReal, noiseLevel)  #adds uniform noise [0,0.003]
+			xReal = corrupt(xReal, noiseLevel)  #adds gaussain noise (x should be in [-1, 1])
 
 			# random latent sample
 			z = Variable(gen.sample_z(xReal.size(0)))
@@ -126,10 +126,8 @@ def train_mode(gen, dis):
 			epochLoss_dis += disLoss.data[0]
 
 			####### Print info #######
-			if i % 100 == 0:
-				i+=1
-				print '[%d, %d] gen: %.5f, dis: %.5f, time: %.2f' \
-				% (e, i, epochLoss_gen/i, epochLoss_dis/i, time()-T)
+			print '[%d, %d] gen: %.5f, dis: %.5f, time: %.2f' \
+			% (e, i, epochLoss_gen/i, epochLoss_dis/i, time()-T)
 
 		i+=1
 		print '[%d, %d] gen: %.5f, dis: %.5f, time: %.2f' \

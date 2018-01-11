@@ -89,6 +89,7 @@ def prep_data(data, useCUDA):
 	return x,y
 
 def corrupt(x, level=0.1):
+	print 'corrupting'
 	noise = level * Variable(torch.randn(x.size())).type_as(x)
 	print type(level), type(noise), level, noise
 	return x + noise
