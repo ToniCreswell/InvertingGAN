@@ -75,8 +75,8 @@ def train_mode(gen, dis):
 		epochLoss_gen = 0
 		epochLoss_dis = 0
 
-		noiseLevel = noiseSigma[e]
-		print 'noise level:', noiseLevel, type(noiseLevel)
+		noiseLevel = float(noiseSigma[e])
+		print 'noise level:', noiseLevel
 
 		T = time()
 		for i, data in enumerate(trainLoader, 0):
@@ -95,7 +95,7 @@ def train_mode(gen, dis):
 
 			####### Calculate discriminator loss #######
 			xFake = gen.forward(z)
-			xFake = corrupt(xFake)
+			xFake = corrupt(xFake, noiseLevel)
 			pReal_D = dis.forward(xReal)
 			pFake_D = dis.forward(xFake.detach())
 
@@ -108,7 +108,7 @@ def train_mode(gen, dis):
 			####### Calculate generator loss #######
 			z_ = Variable(gen.sample_z(xReal.size(0))).type_as(z)
 			xFake_ = gen.forward(z_)
-			xFake_ = corrupt(xFake_)
+			xFake_ = corrupt(xFake_, noiseLevel)
 			pFake_G = dis.forward(xFake_)
 			genLoss = F.binary_cross_entropy(pFake_G, real)
 
