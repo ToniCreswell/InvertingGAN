@@ -67,7 +67,6 @@ def train_mode(gen, dis):
 
 	####### Start Training #######
 	losses = {'gen':[], 'dis':[]}
-	noiseSigma = np.logspace(np.log2(0.5), np.log2(0.001), opts.maxEpochs, base=2)
 	for e in range(opts.maxEpochs):
 		dis.train()
 		gen.train()
@@ -75,16 +74,12 @@ def train_mode(gen, dis):
 		epochLoss_gen = 0
 		epochLoss_dis = 0
 
-		noiseLevel = float(noiseSigma[e])
-		print 'noise level:', noiseLevel
-
 		T = time()
 		for i, data in enumerate(trainLoader, 0):
 
 			# add a small amount of corruption to the data
 			xReal = Variable(data[0])
-			xReal = corrupt(xReal, noiseLevel)  #adds gaussain noise (x should be in [-1, 1])
-
+		
 			# random latent sample
 			z = Variable(gen.sample_z(xReal.size(0)))
 
@@ -95,7 +90,6 @@ def train_mode(gen, dis):
 
 			####### Calculate discriminator loss #######
 			xFake = gen.forward(z)
-			xFake = corrupt(xFake, noiseLevel)
 			pReal_D = dis.forward(xReal)
 			pFake_D = dis.forward(xFake.detach())
 
@@ -108,7 +102,6 @@ def train_mode(gen, dis):
 			####### Calculate generator loss #######
 			z_ = Variable(gen.sample_z(xReal.size(0))).type_as(z)
 			xFake_ = gen.forward(z_)
-			xFake_ = corrupt(xFake_, noiseLevel)
 			pFake_G = dis.forward(xFake_)
 			genLoss = F.binary_cross_entropy(pFake_G, real)
 
