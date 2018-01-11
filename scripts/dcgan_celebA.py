@@ -3,7 +3,7 @@ import sys
 sys.path.append('../')
 
 from dataload import CELEBA
-from utils import make_new_folder, plot_norm_losses, vae_loss_fn, save_input_args, \
+from utils import make_new_folder, plot_norm_losses, save_input_args, \
 is_ready_to_stop_pretraining, sample_z, class_loss_fn, plot_losses # one_hot
 from models import GEN, DIS
 
