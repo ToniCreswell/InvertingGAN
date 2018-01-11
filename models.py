@@ -118,7 +118,7 @@ class DIS(nn.Module):
 		else:
 			return zeros
 
-	def corrupt(x, level=0.1):
+	def corrupt(self, x, level=0.1):
 		noise = level * Variable(torch.randn(x.size())).type_as(x)
 		return x + noise
 

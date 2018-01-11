@@ -4,7 +4,7 @@ sys.path.append('../')
 
 from dataload import CELEBA
 from utils import make_new_folder, plot_norm_losses, save_input_args, \
-sample_z, class_loss_fn, plot_losses # one_hot
+sample_z, class_loss_fn, plot_losses, corrupt # one_hot
 from models import GEN, DIS
 
 
@@ -83,7 +83,7 @@ def train_mode(gen, dis):
 
 			# add a small amount of corruption to the data
 			xReal = Variable(data[0])
-			xReal = dis.corrupt(xReal, noiseLevel)  #adds uniform noise [0,0.003]
+			xReal = corrupt(xReal, noiseLevel)  #adds uniform noise [0,0.003]
 
 			# random latent sample
 			z = Variable(gen.sample_z(xReal.size(0)))
@@ -95,7 +95,7 @@ def train_mode(gen, dis):
 
 			####### Calculate discriminator loss #######
 			xFake = gen.forward(z)
-			xFake = dis.corrupt(xFake, noiseLevel)
+			xFake = corrupt(xFake, noiseLevel)
 			pReal_D = dis.forward(xReal)
 			pFake_D = dis.forward(xFake.detach())
 
@@ -108,7 +108,7 @@ def train_mode(gen, dis):
 			####### Calculate generator loss #######
 			z_ = Variable(gen.sample_z(xReal.size(0))).type_as(z)
 			xFake_ = gen.forward(z_)
-			xFake_ = dis.corrupt(xFake_, noiseLevel)
+			xFake_ = corrupt(xFake_, noiseLevel)
 			pFake_G = dis.forward(xFake_)
 			genLoss = F.binary_cross_entropy(pFake_G, real)
 
