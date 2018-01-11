@@ -116,11 +116,7 @@ def train_mode(gen, dis):
 			####### Print info #######
 			if i%100==1:
 				print '[%d, %d] gen: %.5f, dis: %.5f, time: %.2f' \
-					% (e, i, epochLoss_gen/i, epochLoss_dis/i, time()-T)
-
-		
-		print '[%d, %d] gen: %.5f, dis: %.5f, time: %.2f' \
-				% (e, i, epochLoss_gen/i, epochLoss_dis/i, time()-T)
+					% (e, i, genLoss.data[0], disLoss.data[0], time()-T)
 
 		####### Tests #######
 		gen.eval()
@@ -160,7 +156,7 @@ if __name__=='__main__':
 	IM_SIZE = 64
 
 	gen = GEN(imSize=IM_SIZE, nz=opts.nz, fSize=opts.fSize)
-	dis = DIS (imSize=IM_SIZE, fSize=opts.fSize)
+	dis = DIS(imSize=IM_SIZE, fSize=opts.fSize)
 
 	gen, dis = train_mode(gen, dis)
 
