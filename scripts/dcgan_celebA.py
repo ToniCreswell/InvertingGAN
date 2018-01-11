@@ -79,6 +79,7 @@ def train_mode(gen, dis):
 
 			# add a small amount of corruption to the data
 			xReal = Variable(data[0])
+			xReal = corrupt(xReal) #add a little noise
 			if gen.useCUDA:
 				xReal = xReal.cuda()
 
@@ -86,6 +87,7 @@ def train_mode(gen, dis):
 			####### Calculate discriminator loss #######
 			noSamples = xReal.size(0)
 			xFake = gen.sample_x(noSamples)
+			xFake = corrupt(xFake) #add a little noise
 			pReal_D = dis.forward(xReal)
 			pFake_D = dis.forward(xFake.detach())
 
@@ -97,6 +99,7 @@ def train_mode(gen, dis):
 
 			####### Calculate generator loss #######
 			xFake_ = gen.sample_x(noSamples)
+			xFake_ = corrupt(xFake_) #add a little noise
 			pFake_G = dis.forward(xFake_)
 			genLoss = F.binary_cross_entropy(pFake_G, real)
 
