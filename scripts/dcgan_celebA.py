@@ -1,0 +1,189 @@
+# DCGAN to be trained on CelebA with no labels and have params stored
+import sys
+sys.path.append('../')
+
+from dataload import CELEBA
+from utils import make_new_folder, plot_norm_losses, vae_loss_fn, save_input_args, \
+is_ready_to_stop_pretraining, sample_z, class_loss_fn, plot_losses # one_hot
+from models import dcGEN, dcDIS
+from models import DISCRIMINATOR as CLASSIFIER
+
+import torch
+from torch import optim
+from torch import nn
+from torch.autograd import Variable
+import torch.nn.functional as F
+from torch.nn.functional import binary_cross_entropy as bce
+
+from torchvision import transforms
+from torchvision.utils import make_grid, save_image
+
+import numpy as np
+
+import os
+from os.path import join
+
+import argparse
+
+from PIL import Image
+
+import matplotlib 
+matplotlib.use('Agg')
+from matplotlib import pyplot as plt
+
+from time import time
+
+EPSILON = 1e-6
+
+def get_args():
+	parser = argparse.ArgumentParser()
+	parser.add_argument('--root', default='/data/datasets/LabelSwap', type=str)
+	parser.add_argument('--batchSize', default=64, type=int)
+	parser.add_argument('--maxEpochs', default=10, type=int)
+	parser.add_argument('--nz', default=100, type=int)
+	parser.add_argument('--lr', default=2e-3, type=float)
+	parser.add_argument('--fSize', default=128, type=int)  #multiple of filters to use
+	parser.add_argument('--outDir', default='../../Experiments/DCGAN/', type=str)
+	parser.add_argument('--commit', required=True, type=str)
+	parser.add_argument('--k', default=5, type=int)  #number of times to update D before G
+	parser.add_argument('--loadModel', action='store_true')
+	parser.add_argument('--loadFrom', type=str)
+
+	return parser.parse_args()
+
+
+def train_dcGAN(gen, dis):
+	####### Define optimizer #######
+	genOptimizer = optim.Adam(gen.parameters(), lr=opts.lr)
+	disOptimizer = optim.Adam(dis.parameters(), lr=opts.lr)
+
+	if gen.useCUDA:
+		gen.cuda()
+		dis.cuda()
+	
+	####### Create a new folder to save results and model info #######
+	exDir = make_new_folder(opts.outDir)
+	print 'Outputs will be saved to:',exDir
+	save_input_args(exDir, opts)
+
+	####### Start Training #######
+	losses = {'gen':[], 'dis':[]}
+	noiseSigma = np.logspace(np.log2(0.5), np.log2(0.01), opts.maxEpochs, base=2)
+	for e in range(opts.maxEpochs):
+		dis.train()
+		gen.train()
+
+		epochLoss_gen = 0
+		epochLoss_dis = 0
+
+		noiseLevel = noiseSigma[e]
+		print 'noise level:', noiseLevel
+
+		T = time()
+		for i, data in enumerate(trainLoader, 0):
+
+			#add a small amount of corruption to the data
+
+			xReal = Variable(data[0])
+			xReal = xReal + Variable(noiseLevel * torch.randn(xReal.size())).type_as(xReal)
+
+
+			z = Variable(gen.sample_z(xReal.size(0)))
+			if gen.useCUDA:
+				xReal = xReal.cuda()
+				z = z.cuda()
+
+			####### Calculate discriminator loss #######
+			xFake = gen.forward(z)
+			xFake = xFake + Variable(noiseLevel * torch.randn(xFake.size())).type_as(xFake)
+			pReal_D = dis.forward(xReal)
+			pFake_D = dis.forward(xFake.detach())
+
+			real = dis.ones(xReal.size(0))
+			fake = dis.zeros(xFake.size(0))
+
+			disLoss = 0.5 * F.binary_cross_entropy(pReal_D, real) + \
+						0.5 * F.binary_cross_entropy(pFake_D, fake)
+
+			####### Calculate generator loss #######
+			z_ = Variable(gen.sample_z(xReal.size(0))).type_as(z)
+			xFake_ = gen.forward(z_)
+			xFake_ = xFake_ + Variable(noiseLevel * torch.randn(xFake_.size())).type_as(xFake_)
+			pFake_G = dis.forward(xFake_)
+			genLoss = F.binary_cross_entropy(pFake_G, real)
+
+			####### Do DIS updates #######
+			disOptimizer.zero_grad()
+			disLoss.backward()
+			disOptimizer.step()
+
+			####### Do GEN updates #######
+			genOptimizer.zero_grad()
+			genLoss.backward()
+			genOptimizer.step()
+
+			epochLoss_gen += genLoss.data[0]
+			epochLoss_dis += disLoss.data[0]
+
+			####### Print info #######
+			if i % 100 == 0:
+				i+=1
+				print '[%d, %d] gen: %.5f, dis: %.5f, time: %.2f' \
+				% (e, i, epochLoss_gen/i, epochLoss_dis/i, time()-T)
+
+		i+=1
+		print '[%d, %d] gen: %.5f, dis: %.5f, time: %.2f' \
+				% (e, i, epochLoss_gen/i, epochLoss_dis/i, time()-T)
+
+		losses['gen'].append(epochLoss_gen/i)
+		losses['dis'].append(epochLoss_dis/i)
+
+		####### Tests #######
+		gen.eval()
+		print 'Outputs will be saved to:',exDir
+		#save some samples
+		z = Variable(gen.sample_z(49))
+		if gen.useCUDA:
+				z = z.cuda()
+
+		samples = gen.gen(z)
+		save_image(samples.data, join(exDir,'epoch'+str(e)+'.png'))
+
+		#plot
+		plot_losses(losses, exDir)
+
+		####### Save params #######
+		gen.save_params(exDir)
+		dis.save_params(exDir)
+
+	return gen, dis
+
+
+
+if __name__=='__main__':
+	opts = get_args()
+
+	####### Data set #######
+	print 'Prepare data loaders...'
+	transform = transforms.Compose([transforms.ToTensor(), \
+		transforms.Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5)), transforms.RandomHorizontalFlip()])
+	trainDataset = CELEBA(root=opts.root, train=True, transform=transforms.ToTensor())
+	trainLoader = torch.utils.data.DataLoader(trainDataset, batch_size=opts.batchSize, shuffle=True)
+
+	transform = transforms.Compose([transforms.ToTensor(), \
+		transforms.Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5))])
+	testDataset = CELEBA(root=opts.root, train=False, transform=transform)
+	testLoader = torch.utils.data.DataLoader(testDataset, batch_size=opts.batchSize, shuffle=False)
+	print 'Data loaders ready.'
+
+	###### Create model #####
+	IM_SIZE = 64
+
+	gen = dcGEN(imSize=IM_SIZE, nz=opts.nz, prior=torch.randn, fSize=opts.fSize)
+	dis = dcDIS (imSize=IM_SIZE, fSize=opts.fSize)
+
+	if opts.loadModel:
+		gen.load_params(opts.loadFrom)
+		dis.load_params(opts.loadFrom)
+	else:
+		gen, dis = train_dcGAN(gen, dis)
