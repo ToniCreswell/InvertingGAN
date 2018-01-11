@@ -11,7 +11,7 @@ from os.path import join
 class GEN(nn.Module):
 
 	def __init__(self, imSize, nz=100, fSize=2):
-		super(dcGEN, self).__init__()
+		super(GEN, self).__init__()
 
 		self.nz = nz
 		self.prior = prior
@@ -60,7 +60,7 @@ class GEN(nn.Module):
 
 class DIS(nn.Module):
 	def __init__(self, imSize, fSize=2):
-		super(dcDIS, self).__init__()
+		super(DIS, self).__init__()
 
 		self.fSize = fSize
 		self.imSize = imSize
