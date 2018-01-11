@@ -5,8 +5,8 @@ sys.path.append('../')
 from dataload import CELEBA
 from utils import make_new_folder, plot_norm_losses, vae_loss_fn, save_input_args, \
 is_ready_to_stop_pretraining, sample_z, class_loss_fn, plot_losses # one_hot
-from models import dcGEN, dcDIS
-from models import DISCRIMINATOR as CLASSIFIER
+from models import GEN, DIS
+
 
 import torch
 from torch import optim
@@ -37,22 +37,20 @@ EPSILON = 1e-6
 
 def get_args():
 	parser = argparse.ArgumentParser()
-	parser.add_argument('--root', default='/data/datasets/LabelSwap', type=str)
+	parser.add_argument('--root', default='../../../data/', type=str)
 	parser.add_argument('--batchSize', default=64, type=int)
 	parser.add_argument('--maxEpochs', default=10, type=int)
-	parser.add_argument('--nz', default=100, type=int)
+	parser.add_argument('--nz', default=200, type=int)
 	parser.add_argument('--lr', default=2e-3, type=float)
-	parser.add_argument('--fSize', default=128, type=int)  #multiple of filters to use
-	parser.add_argument('--outDir', default='../../Experiments/DCGAN/', type=str)
+	parser.add_argument('--fSize', default=64, type=int)  #multiple of filters to use
+	parser.add_argument('--outDir', default='../../Experiments/', type=str)
 	parser.add_argument('--commit', required=True, type=str)
 	parser.add_argument('--k', default=5, type=int)  #number of times to update D before G
-	parser.add_argument('--loadModel', action='store_true')
-	parser.add_argument('--loadFrom', type=str)
 
 	return parser.parse_args()
 
 
-def train_dcGAN(gen, dis):
+def train_mode(gen, dis):
 	####### Define optimizer #######
 	genOptimizer = optim.Adam(gen.parameters(), lr=opts.lr)
 	disOptimizer = optim.Adam(dis.parameters(), lr=opts.lr)
@@ -82,33 +80,34 @@ def train_dcGAN(gen, dis):
 		T = time()
 		for i, data in enumerate(trainLoader, 0):
 
-			#add a small amount of corruption to the data
-
+			# add a small amount of corruption to the data
 			xReal = Variable(data[0])
-			xReal = xReal + Variable(noiseLevel * torch.randn(xReal.size())).type_as(xReal)
+			xReal = dis.corrupt(xReal)  #adds uniform noise [0,0.003]
 
-
+			# random latent sample
 			z = Variable(gen.sample_z(xReal.size(0)))
+
+			# make cuda
 			if gen.useCUDA:
 				xReal = xReal.cuda()
 				z = z.cuda()
 
 			####### Calculate discriminator loss #######
 			xFake = gen.forward(z)
-			xFake = xFake + Variable(noiseLevel * torch.randn(xFake.size())).type_as(xFake)
+			xFake = dis.corrupt(xFake)
 			pReal_D = dis.forward(xReal)
 			pFake_D = dis.forward(xFake.detach())
 
 			real = dis.ones(xReal.size(0))
 			fake = dis.zeros(xFake.size(0))
 
-			disLoss = 0.5 * F.binary_cross_entropy(pReal_D, real) + \
-						0.5 * F.binary_cross_entropy(pFake_D, fake)
+			disLoss = 0.5 * (F.binary_cross_entropy(pReal_D, real) + \
+						F.binary_cross_entropy(pFake_D, fake))
 
 			####### Calculate generator loss #######
 			z_ = Variable(gen.sample_z(xReal.size(0))).type_as(z)
 			xFake_ = gen.forward(z_)
-			xFake_ = xFake_ + Variable(noiseLevel * torch.randn(xFake_.size())).type_as(xFake_)
+			xFake_ = dis.corrupt(xFake_)
 			pFake_G = dis.forward(xFake_)
 			genLoss = F.binary_cross_entropy(pFake_G, real)
 
@@ -179,11 +178,12 @@ if __name__=='__main__':
 	###### Create model #####
 	IM_SIZE = 64
 
-	gen = dcGEN(imSize=IM_SIZE, nz=opts.nz, prior=torch.randn, fSize=opts.fSize)
-	dis = dcDIS (imSize=IM_SIZE, fSize=opts.fSize)
+	gen = GEN(imSize=IM_SIZE, nz=opts.nz, prior=torch.randn, fSize=opts.fSize)
+	dis = DIS (imSize=IM_SIZE, fSize=opts.fSize)
 
 	if opts.loadModel:
 		gen.load_params(opts.loadFrom)
 		dis.load_params(opts.loadFrom)
 	else:
-		gen, dis = train_dcGAN(gen, dis)
+		gen, dis = train_mode(gen, dis)
+

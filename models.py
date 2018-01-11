@@ -10,7 +10,7 @@ from os.path import join
 
 class GEN(nn.Module):
 
-	def __init__(self, imSize, nz=100, prior=torch.randn, fSize=2):
+	def __init__(self, imSize, nz=100, fSize=2):
 		super(dcGEN, self).__init__()
 
 		self.nz = nz
@@ -30,10 +30,8 @@ class GEN(nn.Module):
 		self.gen4b = nn.BatchNorm2d(fSize)
 		self.gen5 = nn.ConvTranspose2d(fSize, 3, 3, stride=2, padding=1, output_padding=1)
 
-	def sample_z(self, no_samples, prior=None):
-		if prior is None:
-			prior = self.prior
-		return prior(no_samples, self.nz)
+	def sample_z(self, no_samples):
+		return torch.randn(no_samples, self.nz)
 
 	def gen(self, z):
 
@@ -55,10 +53,10 @@ class GEN(nn.Module):
 		print 'saving params...'
 		torch.save(self.state_dict(), join(exDir, 'gen_params'))
 
-
 	def load_params(self, exDir):
 		print 'loading params...'
 		self.load_state_dict(torch.load(join(exDir, 'gen_params')))
+
 
 class DIS(nn.Module):
 	def __init__(self, imSize, fSize=2):
@@ -120,5 +118,9 @@ class DIS(nn.Module):
 			return zeros.cuda()
 		else:
 			return zeros
+
+	def corrupt(x, level=0.003):
+		noise = sigma * Variable(torch.rand(x.size())).type_as(x)
+		return x + noise
 
  
