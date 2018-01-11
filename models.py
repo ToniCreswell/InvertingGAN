@@ -30,7 +30,11 @@ class GEN(nn.Module):
 		self.gen5 = nn.ConvTranspose2d(fSize, 3, 3, stride=2, padding=1, output_padding=1)
 
 	def sample_z(self, no_samples):
-		return torch.randn(no_samples, self.nz)
+		z = Variable(torch.randn(no_samples, self.nz))
+		if self.useCUDA:
+			return z.cuda()
+		else:
+			return z
 
 	def gen(self, z):
 
@@ -47,6 +51,11 @@ class GEN(nn.Module):
 
 	def forward(self, z):
 		return self.gen(z)
+
+	def sample_x(self, noSamples):
+		z = self.sample_z(noSamples)
+		samples = self.forward(z)
+		return samples
 
 	def save_params(self, exDir):
 		print 'saving params...'
@@ -117,9 +126,5 @@ class DIS(nn.Module):
 			return zeros.cuda()
 		else:
 			return zeros
-
-	def corrupt(self, x, level=0.1):
-		noise = level * Variable(torch.randn(x.size())).type_as(x)
-		return x + noise
 
  
