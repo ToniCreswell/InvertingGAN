@@ -126,7 +126,11 @@ def train_mode(gen, dis):
 			epochLoss_dis += disLoss.data[0]
 
 			####### Print info #######
-		i+=1
+			if i%100==1:
+				print '[%d, %d] gen: %.5f, dis: %.5f, time: %.2f' \
+					% (e, i, epochLoss_gen/i, epochLoss_dis/i, time()-T)
+
+		
 		print '[%d, %d] gen: %.5f, dis: %.5f, time: %.2f' \
 				% (e, i, epochLoss_gen/i, epochLoss_dis/i, time()-T)
 
