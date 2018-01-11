@@ -14,7 +14,7 @@ class GEN(nn.Module):
 		super(GEN, self).__init__()
 
 		self.nz = nz
-		
+
 		inSize = imSize // (2 ** 4)
 		self.inSize = inSize
 
@@ -118,8 +118,8 @@ class DIS(nn.Module):
 		else:
 			return zeros
 
-	def corrupt(x, level=0.003):
-		noise = sigma * Variable(torch.rand(x.size())).type_as(x)
+	def corrupt(x, level=0.1):
+		noise = level * Variable(torch.randn(x.size())).type_as(x)
 		return x + noise
 
  
