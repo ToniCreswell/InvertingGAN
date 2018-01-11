@@ -45,7 +45,6 @@ def get_args():
 	parser.add_argument('--fSize', default=64, type=int)  #multiple of filters to use
 	parser.add_argument('--outDir', default='../../Experiments/', type=str)
 	parser.add_argument('--commit', required=True, type=str)
-	parser.add_argument('--k', default=5, type=int)  #number of times to update D before G
 
 	return parser.parse_args()
 
