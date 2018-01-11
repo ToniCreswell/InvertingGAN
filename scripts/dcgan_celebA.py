@@ -182,9 +182,5 @@ if __name__=='__main__':
 	gen = GEN(imSize=IM_SIZE, nz=opts.nz, fSize=opts.fSize)
 	dis = DIS (imSize=IM_SIZE, fSize=opts.fSize)
 
-	if opts.loadModel:
-		gen.load_params(opts.loadFrom)
-		dis.load_params(opts.loadFrom)
-	else:
-		gen, dis = train_mode(gen, dis)
+	gen, dis = train_mode(gen, dis)
 
