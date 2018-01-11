@@ -79,9 +79,9 @@ def train_mode(gen, dis):
 
 			# add a small amount of corruption to the data
 			xReal = Variable(data[0])
-			xReal = corrupt(xReal) #add a little noise
 			if gen.useCUDA:
 				xReal = xReal.cuda()
+			xReal = corrupt(xReal) #add a little noise
 
 
 			####### Calculate discriminator loss #######
