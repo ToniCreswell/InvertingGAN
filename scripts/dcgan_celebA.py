@@ -110,8 +110,8 @@ def train_mode(gen, dis):
 			genLoss.backward()
 			genOptimizer.step()
 
-			epochLoss_gen += genLoss.data[0]
-			epochLoss_dis += disLoss.data[0]
+			losses['gen'].append(genLoss.data[0])
+			losses['dis'].append(disLoss.data[0])
 
 			####### Print info #######
 			if i%100==1:
@@ -121,9 +121,6 @@ def train_mode(gen, dis):
 		
 		print '[%d, %d] gen: %.5f, dis: %.5f, time: %.2f' \
 				% (e, i, epochLoss_gen/i, epochLoss_dis/i, time()-T)
-
-		losses['gen'].append(epochLoss_gen/i)
-		losses['dis'].append(epochLoss_dis/i)
 
 		####### Tests #######
 		gen.eval()
