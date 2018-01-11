@@ -38,7 +38,7 @@ EPSILON = 1e-6
 def get_args():
 	parser = argparse.ArgumentParser()
 	parser.add_argument('--root', default='../../../../data/', type=str)
-	parser.add_argument('--batchSize', default=64, type=int)
+	parser.add_argument('--batchSize', default=128, type=int)
 	parser.add_argument('--maxEpochs', default=10, type=int)
 	parser.add_argument('--nz', default=100, type=int)
 	parser.add_argument('--lr', default=1e-3, type=float)
@@ -52,8 +52,8 @@ def get_args():
 
 def train_mode(gen, dis):
 	####### Define optimizer #######
-	genOptimizer = optim.Adam(gen.parameters(), lr=opts.lr)
-	disOptimizer = optim.SGD(dis.parameters(), lr=opts.lr)
+	genOptimizer = optim.Adam(gen.parameters(), lr=opts.lr, betas=(0.5, 0.999))
+	disOptimizer = optim.SGD(dis.parameters(), lr=opts.lr, momentum=0.5)
 
 	if gen.useCUDA:
 		torch.cuda.set_device(opts.gpuNo)
