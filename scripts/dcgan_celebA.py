@@ -45,6 +45,7 @@ def get_args():
 	parser.add_argument('--fSize', default=64, type=int)  #multiple of filters to use
 	parser.add_argument('--outDir', default='../../Experiments/', type=str)
 	parser.add_argument('--commit', required=True, type=str)
+	parser.add_argument('--gpuNo', default=0, type=int)
 
 	return parser.parse_args()
 
@@ -55,6 +56,7 @@ def train_mode(gen, dis):
 	disOptimizer = optim.Adam(dis.parameters(), lr=opts.lr)
 
 	if gen.useCUDA:
+		torch.cuda.set_device(opts.gpuNo)
 		gen.cuda()
 		dis.cuda()
 	
