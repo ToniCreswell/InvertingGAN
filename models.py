@@ -14,8 +14,7 @@ class GEN(nn.Module):
 		super(GEN, self).__init__()
 
 		self.nz = nz
-		self.prior = prior
-
+		
 		inSize = imSize // (2 ** 4)
 		self.inSize = inSize
 
