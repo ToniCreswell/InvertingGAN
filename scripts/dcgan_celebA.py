@@ -52,8 +52,8 @@ def get_args():
 
 def train_mode(gen, dis):
 	####### Define optimizer #######
-	genOptimizer = optim.Adam(gen.parameters(), lr=opts.lr)
-	disOptimizer = optim.SGD(dis.parameters(), lr=opts.lr, momentum=0.5)
+	genOptimizer = optim.RMSprop(gen.parameters(), lr=opts.lr, momentum=0.9)
+	disOptimizer = optim.RMSprop(dis.parameters(), lr=opts.lr, momentum=0.5)
 
 	if gen.useCUDA:
 		torch.cuda.set_device(opts.gpuNo)
