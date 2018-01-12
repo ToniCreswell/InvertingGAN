@@ -39,9 +39,9 @@ def get_args():
 	parser = argparse.ArgumentParser()
 	parser.add_argument('--root', default='../../../../data/', type=str)
 	parser.add_argument('--batchSize', default=128, type=int)
-	parser.add_argument('--maxEpochs', default=10, type=int)
+	parser.add_argument('--maxEpochs', default=200, type=int)
 	parser.add_argument('--nz', default=100, type=int)
-	parser.add_argument('--lr', default=1e-3, type=float)
+	parser.add_argument('--lr', default=2e-4, type=float)
 	parser.add_argument('--fSize', default=64, type=int)  #multiple of filters to use
 	parser.add_argument('--outDir', default='../../Experiments/', type=str)
 	parser.add_argument('--commit', required=True, type=str)
@@ -104,7 +104,7 @@ def train_mode(gen, dis):
 
 			####### Calculate generator loss #######
 			xFake_ = gen.sample_x(noSamples)
-			xFake_ = corrupt(xFake_, noiseLevel) #add a little noise
+			xFake_ = corrupt(xFake_, noiseLeve) #add a little noise
 			pFake_G = dis.forward(xFake_)
 			genLoss = F.binary_cross_entropy(pFake_G, real)
 
