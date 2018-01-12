@@ -104,7 +104,7 @@ def train_mode(gen, dis):
 
 			####### Calculate generator loss #######
 			xFake_ = gen.sample_x(noSamples)
-			xFake_ = corrupt(xFake_, noiseLeve) #add a little noise
+			xFake_ = corrupt(xFake_, noiseLevel) #add a little noise
 			pFake_G = dis.forward(xFake_)
 			genLoss = F.binary_cross_entropy(pFake_G, real)
 
