@@ -52,7 +52,7 @@ def get_args():
 
 def train_mode(gen, dis):
 	####### Define optimizer #######
-	genOptimizer = optim.Adam(gen.parameters(), lr=opts.lr, betas=(0.5, 0.999))
+	genOptimizer = optim.Adam(gen.parameters(), lr=opts.lr)
 	disOptimizer = optim.SGD(dis.parameters(), lr=opts.lr, momentum=0.5)
 
 	if gen.useCUDA:
