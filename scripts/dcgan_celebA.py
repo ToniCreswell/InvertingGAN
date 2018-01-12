@@ -52,7 +52,7 @@ def get_args():
 
 def train_mode(gen, dis):
 	####### Define optimizer #######
-	genOptimizer = optim.RMSprop(gen.parameters(), lr=opts.lr, momentum=0.9)
+	genOptimizer = optim.RMSprop(gen.parameters(), lr=opts.lr, momentum=0.5)
 	disOptimizer = optim.RMSprop(dis.parameters(), lr=opts.lr, momentum=0.5)
 
 	if gen.useCUDA:
