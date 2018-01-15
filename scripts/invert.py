@@ -129,7 +129,7 @@ if __name__=='__main__':
 	print 'Prepare data loaders...'
 	transform = transforms.Compose([transforms.ToTensor(), \
 		transforms.Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5))])
-	testDataset = CELEBA(root=opts.root, train=False, transform=transform)
+	testDataset = CELEBA(root=opts.root, train=False, transform=transform, Ntest=100)  #most models trained with Ntest=1000, but using 100 to prevent memory errors
 	testLoader = torch.utils.data.DataLoader(testDataset, batch_size=opts.batchSize, shuffle=False)
 	print 'Data loaders ready.'
 
