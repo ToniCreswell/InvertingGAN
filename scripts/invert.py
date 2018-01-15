@@ -48,11 +48,13 @@ def get_args():
 	return parser.parse_args()
 
 
-def find_z(gen, dataLoader, nz, lr, exDir, maxEpochs=100, noSamples=49):
+def find_z(gen, dataLoader, nz, lr, exDir, maxEpochs=100):
 
 	#generator in eval mode
 	gen.eval()
-	gen.cuda()
+
+	if gen.useCUDA:
+		gen.cuda()
 
 	#save subset of target images:
 	xTarget = iter(dataLoader).next()
@@ -60,7 +62,8 @@ def find_z(gen, dataLoader, nz, lr, exDir, maxEpochs=100, noSamples=49):
 
 
 	#start with an initially random z
-	z = Variable(torch.randn(noSamples, nz).cuda(), requires_grad=True)
+	#N.B. dataloader must not be shuffeling x
+	Z = Variable(torch.randn(len(dataLoader), nz).cuda(), requires_grad=True)
 
 	#optimizer
 	optZ = torch.optim.RMSprop(params = [z], lr=lr, momentum=0)
@@ -71,6 +74,7 @@ def find_z(gen, dataLoader, nz, lr, exDir, maxEpochs=100, noSamples=49):
 		for i, data in enumerate(dataLoader):
 
 			x, y = prep_data(data, useCUDA = gen.useCUDA)
+			z = Z[i * batchSize : (i + 1) * batchSize]
 			xHAT = gen.forward(z)
 
 			loss = F.mse_loss(x, xHAT)
