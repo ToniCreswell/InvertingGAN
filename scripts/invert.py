@@ -138,7 +138,7 @@ if __name__=='__main__':
 
 	#start with an initially random z
 	#N.B. dataloader must not be shuffeling x
-	Zinit = Variable(torch.randn(len(testDataset), nz).cuda(), requires_grad=True)
+	Zinit = Variable(torch.randn(len(testDataset), opts.nz).cuda(), requires_grad=True)
 
 	z = find_z(gen=gen, Zinit=Zinit, dataLoader=testLoader, nz=opts.nz, lr=opts.lr, exDir=exDir, batchSize = opts.batchSize, maxEpochs=opts.maxEpochs)
 
