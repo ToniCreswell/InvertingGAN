@@ -52,6 +52,7 @@ def find_z(gen, dataLoader, nz, lr, exDir, maxEpochs=100, noSamples=49):
 
 	#generator in eval mode
 	gen.eval()
+	gen.cuda()
 
 	#save subset of target images:
 	xTarget = iter(dataLoader).next()
