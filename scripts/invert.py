@@ -79,9 +79,6 @@ def find_z(gen, x, nz, lr, exDir, maxEpochs=100):
 		if e>0:
 			plot_losses(losses, exDir, e+1)
 
-		xHAT.delete()
-		loss.delete()
-
 	#visualise the final output
 	xHAT = gen.forward(Zinit)
 	save_image(xHAT.data, join(exDir, 'rec'+str(e)+'.png'))
