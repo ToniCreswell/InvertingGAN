@@ -63,7 +63,7 @@ class GEN(nn.Module):
 
 	def load_params(self, exDir):
 		print 'loading params...'
-		self.load_state_dict(torch.load(join(exDir, 'gen_params')))
+		self.load_state_dict(torch.load(join(exDir, 'gen_params')), map_location=lambda storage, loc: storage)
 
 
 class DIS(nn.Module):
