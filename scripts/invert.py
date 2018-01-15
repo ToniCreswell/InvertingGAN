@@ -65,7 +65,7 @@ def find_z(gen, dataLoader, nz, lr, exDir, maxEpochs=100, noSamples=49):
 	optZ = torch.optim.RMSprop(params = z, lr=lr, momentum=0)
 
 	losses = {'rec': []}
-	for e in range(maxEpochs)
+	for e in range(maxEpochs):
 		epochLoss=0
 		for i, data in enumerate(dataLoader):
 
