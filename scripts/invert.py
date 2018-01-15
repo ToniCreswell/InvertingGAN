@@ -56,7 +56,7 @@ def find_z(gen, x, nz, lr, exDir, maxEpochs=100):
 	if gen.useCUDA:
 		gen.cuda()
 
-	Zinit = Variable(torch.randn(1,opts.nz).cuda())
+	Zinit = Variable(torch.randn(1,opts.nz).cuda(), requires_grad=True)
 
 	#optimizer
 	optZ = torch.optim.RMSprop([Zinit], lr=lr)
