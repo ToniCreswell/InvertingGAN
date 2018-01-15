@@ -71,7 +71,7 @@ def find_z(gen, x, nz, lr, exDir, maxEpochs=100):
 		loss.backward()
 		optZ.step()
 
-		print optZ
+		print optZ.step()
 
 		losses['rec'].append(loss.data[0])
 		print '[%d] loss: %0.5f' % (e, loss.data[0])
