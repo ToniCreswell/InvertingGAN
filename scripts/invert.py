@@ -51,7 +51,7 @@ def get_args():
 def find_z(gen, x, nz, lr, exDir, maxEpochs=100):
 
 	#generator in eval mode
-	gen.eval()
+	gen.train()
 
 	if gen.useCUDA:
 		gen.cuda()
@@ -65,14 +65,14 @@ def find_z(gen, x, nz, lr, exDir, maxEpochs=100):
 	for e in range(maxEpochs):
 
 		xHAT = gen.forward(Zinit)
-		loss = F.mse_loss(x, xHAT)
+		recLoss = F.mse_loss(x, xHAT)
 
 		optZ.zero_grad()
-		loss.backward()
+		recLoss.backward()
 		optZ.step()
 
-		losses['rec'].append(loss.data[0])
-		print '[%d] loss: %0.5f' % (e, loss.data[0])
+		losses['rec'].append(recLoss.data[0])
+		print '[%d] loss: %0.5f' % (e, recLoss.data[0])
 
 		#plot training losses
 		if e>0:
