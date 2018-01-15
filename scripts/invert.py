@@ -69,7 +69,7 @@ def find_z(gen, Zinit, dataLoader, nz, lr, exDir, batchSize, maxEpochs=100):
 		for i, data in enumerate(dataLoader):
 
 			x, y = prep_data(data, useCUDA = gen.useCUDA)
-			z = Z[i * batchSize : (i + 1) * batchSize]
+			z = Zinit[i * batchSize : (i + 1) * batchSize]
 			xHAT = gen.forward(z)
 
 			loss = F.mse_loss(x, xHAT)
