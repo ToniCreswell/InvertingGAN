@@ -80,7 +80,9 @@ def find_z(gen, dataLoader, nz, lr, exDir, maxEpochs=100, noSamples=49):
 
 			epochLoss+=loss
 
-		losses.append(loss)
+		losses.append(loss/(i+1))
+
+		[]
 
 		#plot training losses
 		if e>0:
