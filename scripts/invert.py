@@ -67,9 +67,11 @@ def find_z(gen, x, nz, lr, exDir, maxEpochs=100):
 		xHAT = gen.forward(Zinit)
 		loss = F.mse_loss(x, xHAT)
 
-		# optZ.zero_grad()
+		print Zinit
+		optZ.zero_grad()
 		loss.backward()
 		optZ.step()
+		print Zinit
 
 		losses['rec'].append(loss.data[0])
 		print '[%d] loss: %0.5f' % (e, loss.data[0])
