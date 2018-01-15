@@ -64,7 +64,7 @@ def find_z(gen, x, nz, lr, exDir, maxEpochs=100):
 	losses = {'rec': []}
 	for e in range(maxEpochs):
 		epochLoss=0
-		xHAT = gen.forward(z)
+		xHAT = gen.forward(Zinit)
 
 		loss = F.mse_loss(x, xHAT)
 
