@@ -55,7 +55,7 @@ def find_z(gen, dataLoader, nz, lr, exDir, maxEpochs=100, noSamples=49):
 
 	#save subset of target images:
 	xTarget = iter(dataLoader).next()
-	save_image(xTarget, join(exDir, 'target.png'))
+	save_image(xTarget.data, join(exDir, 'target.png'))
 
 
 	#start with an initially random z
