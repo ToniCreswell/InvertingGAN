@@ -48,7 +48,7 @@ def get_args():
 	return parser.parse_args()
 
 
-def find_z(gen, Zinit, dataLoader, nz, lr, exDir, batchSize, maxEpochs=100):
+def find_z(gen, x, Zinit, lr, exDir, maxEpochs=100):
 
 	#generator in eval mode
 	gen.eval()
@@ -56,9 +56,7 @@ def find_z(gen, Zinit, dataLoader, nz, lr, exDir, batchSize, maxEpochs=100):
 	if gen.useCUDA:
 		gen.cuda()
 
-	#save subset of target images:
-	xTarget = iter(dataLoader).next()
-	save_image(xTarget[0], join(exDir, 'target.png'))
+	Zinit = Variable(torch.randn(1, opts.nz).cuda(), requires_grad=True)
 
 	#optimizer
 	optZ = torch.optim.RMSprop(params = [Zinit], lr=lr, momentum=0)
@@ -66,21 +64,15 @@ def find_z(gen, Zinit, dataLoader, nz, lr, exDir, batchSize, maxEpochs=100):
 	losses = {'rec': []}
 	for e in range(maxEpochs):
 		epochLoss=0
-		for i, data in enumerate(dataLoader):
+		xHAT = gen.forward(z)
 
-			x, y = prep_data(data, useCUDA = gen.useCUDA)
-			z = Zinit[i * batchSize : (i + 1) * batchSize]
-			xHAT = gen.forward(z)
+		loss = F.mse_loss(x, xHAT)
 
-			loss = F.mse_loss(x, xHAT)
+		optZ.zero_grad()
+		loss.backward()
+		optZ.step()
 
-			optZ.zero_grad()
-			loss.backward()
-			optZ.step()
-
-			epochLoss+=loss
-
-		losses['rec'].append(loss.data[0]/(i+1))
+		losses['rec'].append(loss.data[0])
 
 		[]
 
@@ -90,7 +82,7 @@ def find_z(gen, Zinit, dataLoader, nz, lr, exDir, batchSize, maxEpochs=100):
 
 		#visualise the training progress
 		xHAT = gen.forward(z)
-		save_image(xHAT.data, join(exDir, 'rec_'+str(e)+'.png'))
+		save_image([x.data, xHAT.data], join(exDir, 'rec_'+str(e)+'.png'))
 
 	return z
 
@@ -127,7 +119,7 @@ if __name__=='__main__':
 	transform = transforms.Compose([transforms.ToTensor(), \
 		transforms.Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5))])
 	testDataset = CELEBA(root=opts.root, train=False, transform=transform, Ntest=100)  #most models trained with Ntest=1000, but using 100 to prevent memory errors
-	testLoader = torch.utils.data.DataLoader(testDataset, batch_size=opts.batchSize, shuffle=False)
+	testLoader = torch.utils.data.DataLoader(testDataset, batch_size=1, shuffle=False)
 	print 'Data loaders ready.'
 
 	###### Create model and load parameters #####
@@ -137,11 +129,13 @@ if __name__=='__main__':
 	gen.load_params(opts.exDir)
 	print 'params loaded'
 
-	#start with an initially random z
-	#N.B. dataloader must not be shuffeling x
-	Zinit = Variable(torch.randn(len(testDataset), opts.nz).cuda(), requires_grad=True)
 
-	z = find_z(gen=gen, Zinit=Zinit, dataLoader=testLoader, nz=opts.nz, lr=opts.lr, exDir=exDir, batchSize = opts.batchSize, maxEpochs=opts.maxEpochs)
+	#Find each z individually for each x
+	for i, data in enumerate(testLoader)
+		x, y = prep_data(data, useCUDA=gen.useCUDA)
+		z = find_z(gen=gen, x, nz=opts.nz, lr=opts.lr, exDir=exDir, maxEpochs=opts.maxEpochs)
+
+		break
 
 
 
