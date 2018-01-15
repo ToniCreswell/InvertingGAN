@@ -69,7 +69,7 @@ def find_z(gen, x, nz, lr, exDir, maxEpochs=100):
 
 		optZ.zero_grad()
 		# loss.backward()
-		Zinit.backward()
+		Zinit.sum().backward()
 		optZ.step()
 
 		print optZ.step()
