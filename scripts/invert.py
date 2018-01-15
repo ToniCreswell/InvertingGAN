@@ -51,7 +51,7 @@ def get_args():
 def find_z(gen, x, nz, lr, exDir, maxEpochs=100):
 
 	#generator in eval mode
-	gen.train()
+	gen.eval()
 
 	if gen.useCUDA:
 		gen.cuda()
