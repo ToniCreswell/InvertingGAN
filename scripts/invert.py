@@ -70,13 +70,10 @@ def find_z(gen, Zinit, dataLoader, nz, lr, exDir, batchSize, maxEpochs=100):
 
 			x, y = prep_data(data, useCUDA = gen.useCUDA)
 			z = Zinit[i * batchSize : (i + 1) * batchSize]
-			print 'z:',z.size()
 			xHAT = gen.forward(z)
-			print 'xHAT:',xHAT.size()
 
 			loss = F.mse_loss(x, xHAT)
 
-			print 'optimize'
 			optZ.zero_grad()
 			loss.backward()
 			optZ.step()
@@ -142,7 +139,6 @@ if __name__=='__main__':
 	#start with an initially random z
 	#N.B. dataloader must not be shuffeling x
 	Zinit = Variable(torch.randn(len(testDataset), opts.nz).cuda(), requires_grad=True)
-	print 'Zinit:', Zinit.size()
 
 	z = find_z(gen=gen, Zinit=Zinit, dataLoader=testLoader, nz=opts.nz, lr=opts.lr, exDir=exDir, batchSize = opts.batchSize, maxEpochs=opts.maxEpochs)
 
