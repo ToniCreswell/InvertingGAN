@@ -56,7 +56,7 @@ def find_z(gen, x, nz, lr, exDir, maxEpochs=100):
 	if gen.useCUDA:
 		gen.cuda()
 
-	Zinit = Variable(torch.randn(1,opts.nz).cuda(), requires_grad=True)
+	Zinit = Variable(torch.randn(1,opts.nz).cuda())
 
 	#optimizer
 	optZ = torch.optim.RMSprop([Zinit], lr=lr)
@@ -66,8 +66,6 @@ def find_z(gen, x, nz, lr, exDir, maxEpochs=100):
 
 		xHAT = gen.forward(Zinit)
 		loss = F.mse_loss(x, xHAT)
-
-		loss += Zinit.mean()**2
 
 		optZ.zero_grad()
 		loss.backward()
