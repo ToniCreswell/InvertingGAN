@@ -48,7 +48,7 @@ def get_args():
 	return parser.parse_args()
 
 
-def find_z(gen, dataLoader, nz, lr, exDir, maxEpochs=100):
+def find_z(gen, dataLoader, nz, lr, exDir, batchSize, maxEpochs=100):
 
 	#generator in eval mode
 	gen.eval()
@@ -141,7 +141,7 @@ if __name__=='__main__':
 	gen = GEN(imSize=IM_SIZE, nz=opts.nz, fSize=opts.fSize)
 	gen.load_params(opts.exDir)
 
-	z = find_z(gen=gen, dataLoader=testLoader, nz=opts.nz, lr=opts.lr, exDir=exDir, maxEpochs=opts.maxEpochs)
+	z = find_z(gen=gen, dataLoader=testLoader, nz=opts.nz, lr=opts.lr, exDir=exDir, batchSize = opts.batchSize, maxEpochs=opts.maxEpochs)
 
 
 
