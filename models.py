@@ -63,7 +63,8 @@ class GEN(nn.Module):
 
 	def load_params(self, exDir):
 		print 'loading params...'
-		self.load_state_dict(torch.load(join(exDir, 'gen_params')), map_location=lambda storage, loc: storage)
+		self.load_state_dict(torch.load(join(exDir, 'gen_params', map_location=lambda storage, loc: storage)))
+
 
 
 class DIS(nn.Module):
@@ -111,7 +112,7 @@ class DIS(nn.Module):
 
 	def load_params(self, exDir):
 		print 'loading params...'
-		self.load_state_dict(torch.load(join(exDir, 'dis_params')), map_location=lambda storage, loc: storage)
+		self.load_state_dict(torch.load(join(exDir, 'dis_params', map_location=lambda storage, loc: storage)))
 
 	def ones(self, N):
 		ones = Variable(torch.Tensor(N,1).fill_(1))
