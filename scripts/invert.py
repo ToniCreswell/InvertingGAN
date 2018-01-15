@@ -40,7 +40,7 @@ def get_args():
 	parser.add_argument('--batchSize', default=128, type=int)
 	parser.add_argument('--maxEpochs', default=200, type=int)
 	parser.add_argument('--nz', default=100, type=int)
-	parser.add_argument('--lr', default=2e-4, type=float)
+	parser.add_argument('--lr', default=2e-6, type=float)
 	parser.add_argument('--fSize', default=64, type=int)  #multiple of filters to use
 	parser.add_argument('--exDir', required=True, type=str)
 	parser.add_argument('--gpuNo', default=0, type=int)
@@ -74,8 +74,6 @@ def find_z(gen, x, nz, lr, exDir, maxEpochs=100):
 
 		losses['rec'].append(loss.data[0])
 
-		[]
-
 		#plot training losses
 		if e>0:
 			plot_losses(losses, exDir, e+1)
@@ -85,7 +83,7 @@ def find_z(gen, x, nz, lr, exDir, maxEpochs=100):
 	save_image(xHAT.data, join(exDir, 'rec'+str(e)+'.png'))
 	save_image(x.data, join(exDir, 'original'+str(e)+'.png'))
 
-	return z
+	return Zinit
 
 
 
