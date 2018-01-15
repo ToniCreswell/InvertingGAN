@@ -83,7 +83,7 @@ def find_z(gen, Zinit, dataLoader, nz, lr, exDir, batchSize, maxEpochs=100):
 
 			epochLoss+=loss
 
-		losses['rec'].append(loss/(i+1))
+		losses['rec'].append(loss.data[0]/(i+1))
 
 		[]
 
