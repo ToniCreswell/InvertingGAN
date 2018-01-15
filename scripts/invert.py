@@ -81,7 +81,7 @@ def find_z(gen, x, nz, lr, exDir, maxEpochs=100):
 			plot_losses(losses, exDir, e+1)
 
 		#visualise the training progress
-		xHAT = gen.forward(z)
+		xHAT = gen.forward(Zinit)
 		save_image([x.data, xHAT.data], join(exDir, 'rec_'+str(e)+'.png'))
 
 	return z
