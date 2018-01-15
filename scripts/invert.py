@@ -89,7 +89,7 @@ def find_z(gen, Zinit, dataLoader, nz, lr, exDir, batchSize, maxEpochs=100):
 
 		#plot training losses
 		if e>0:
-			plot_losses(losses)
+			plot_losses(losses, exDir, e+1)
 
 		#visualise the training progress
 		xHAT = gen.forward(z)
