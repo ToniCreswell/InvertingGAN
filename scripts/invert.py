@@ -66,7 +66,7 @@ def find_z(gen, dataLoader, nz, lr, exDir, maxEpochs=100):
 	Z = Variable(torch.randn(len(dataLoader), nz).cuda(), requires_grad=True)
 
 	#optimizer
-	optZ = torch.optim.RMSprop(params = [z], lr=lr, momentum=0)
+	optZ = torch.optim.RMSprop(params = [Z], lr=lr, momentum=0)
 
 	losses = {'rec': []}
 	for e in range(maxEpochs):
