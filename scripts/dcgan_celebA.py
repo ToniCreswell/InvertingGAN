@@ -77,7 +77,7 @@ def train_mode(gen, dis):
 		epochLoss_gen = 0
 		epochLoss_dis = 0
 
-		noiseLevel = float(noiseSigma[e])
+		# noiseLevel = float(noiseSigma[e])
 
 		T = time()
 		for i, data in enumerate(trainLoader, 0):
