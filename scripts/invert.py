@@ -131,7 +131,7 @@ if __name__=='__main__':
 
 
 	#Find each z individually for each x
-	for i, data in enumerate(testLoader)
+	for i, data in enumerate(testLoader):
 		x, y = prep_data(data, useCUDA=gen.useCUDA)
 		z = find_z(gen=gen, x, nz=opts.nz, lr=opts.lr, exDir=exDir, maxEpochs=opts.maxEpochs)
 
