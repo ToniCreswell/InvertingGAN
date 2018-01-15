@@ -48,7 +48,7 @@ def get_args():
 	return parser.parse_args()
 
 
-def find_z(gen, x, Zinit, lr, exDir, maxEpochs=100):
+def find_z(gen, x, Zinit, nz, lr, exDir, maxEpochs=100):
 
 	#generator in eval mode
 	gen.eval()
@@ -56,7 +56,7 @@ def find_z(gen, x, Zinit, lr, exDir, maxEpochs=100):
 	if gen.useCUDA:
 		gen.cuda()
 
-	Zinit = Variable(torch.randn(1, opts.nz).cuda(), requires_grad=True)
+	Zinit = Variable(torch.randn(1, nz).cuda(), requires_grad=True)
 
 	#optimizer
 	optZ = torch.optim.RMSprop(params = [Zinit], lr=lr, momentum=0)
@@ -133,7 +133,7 @@ if __name__=='__main__':
 	#Find each z individually for each x
 	for i, data in enumerate(testLoader):
 		x, y = prep_data(data, useCUDA=gen.useCUDA)
-		z = find_z(gen=gen, x, nz=opts.nz, lr=opts.lr, exDir=exDir, maxEpochs=opts.maxEpochs)
+		z = find_z(gen=gen, x=x, nz=opts.nz, lr=opts.lr, exDir=exDir, maxEpochs=opts.maxEpochs)
 
 		break
 
