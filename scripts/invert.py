@@ -135,6 +135,7 @@ if __name__=='__main__':
 
 	gen = GEN(imSize=IM_SIZE, nz=opts.nz, fSize=opts.fSize)
 	gen.load_params(opts.exDir)
+	print 'params loaded'
 
 	#start with an initially random z
 	#N.B. dataloader must not be shuffeling x
