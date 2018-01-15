@@ -48,7 +48,7 @@ def get_args():
 	return parser.parse_args()
 
 
-def find_z(gen, x, Zinit, nz, lr, exDir, maxEpochs=100):
+def find_z(gen, x, nz, lr, exDir, maxEpochs=100):
 
 	#generator in eval mode
 	gen.eval()
