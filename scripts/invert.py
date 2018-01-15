@@ -74,6 +74,7 @@ def find_z(gen, Zinit, dataLoader, nz, lr, exDir, batchSize, maxEpochs=100):
 
 			loss = F.mse_loss(x, xHAT)
 
+			print 'optimize'
 			optZ.zero_grad()
 			loss.backward()
 			optZ.step()
