@@ -90,7 +90,7 @@ def find_z(gen, dataLoader, nz, lr, exDir, maxEpochs=100, noSamples=49):
 
 		#visualise the training progress
 		xHAT = gen,forward(z)
-		save_image(xHAT, join(exDir, 'rec_'+str(e)+'.png'))
+		save_image(xHAT.data, join(exDir, 'rec_'+str(e)+'.png'))
 
 	return z
 
