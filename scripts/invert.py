@@ -48,7 +48,7 @@ def get_args():
 	return parser.parse_args()
 
 
-def find_z(gen, dataLoader, nz, lr, exDir, batchSize, maxEpochs=100):
+def find_z(gen, Zinit, dataLoader, nz, lr, exDir, batchSize, maxEpochs=100):
 
 	#generator in eval mode
 	gen.eval()
@@ -60,13 +60,8 @@ def find_z(gen, dataLoader, nz, lr, exDir, batchSize, maxEpochs=100):
 	xTarget = iter(dataLoader).next()
 	save_image(xTarget[0], join(exDir, 'target.png'))
 
-
-	#start with an initially random z
-	#N.B. dataloader must not be shuffeling x
-	Z = Variable(torch.randn(len(dataLoader), nz).cuda(), requires_grad=True)
-
 	#optimizer
-	optZ = torch.optim.RMSprop(params = [Z], lr=lr, momentum=0)
+	optZ = torch.optim.RMSprop(params = [Zinit], lr=lr, momentum=0)
 
 	losses = {'rec': []}
 	for e in range(maxEpochs):
@@ -141,7 +136,11 @@ if __name__=='__main__':
 	gen = GEN(imSize=IM_SIZE, nz=opts.nz, fSize=opts.fSize)
 	gen.load_params(opts.exDir)
 
-	z = find_z(gen=gen, dataLoader=testLoader, nz=opts.nz, lr=opts.lr, exDir=exDir, batchSize = opts.batchSize, maxEpochs=opts.maxEpochs)
+	#start with an initially random z
+	#N.B. dataloader must not be shuffeling x
+	Zinit = Variable(torch.randn(len(testDataset), nz).cuda(), requires_grad=True)
+
+	z = find_z(gen=gen, Zinit=Zinit, dataLoader=testLoader, nz=opts.nz, lr=opts.lr, exDir=exDir, batchSize = opts.batchSize, maxEpochs=opts.maxEpochs)
 
 
 
