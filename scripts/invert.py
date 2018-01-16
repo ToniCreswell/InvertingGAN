@@ -103,13 +103,12 @@ if __name__=='__main__':
 	opts = get_args()
 
 	#Create new subfolder for saving results and training params
-	invDir = join(opts.exDir, 'inversionExperiments')
+	exDir = join(opts.exDir, 'inversionExperiments')
 	try:
 		os.mkdir(invDir)
 	except:
 		print 'already exists'
 
-	exDir = make_new_folder(invDir)
 	print 'Outputs will be saved to:',exDir
 	save_input_args(exDir, opts)
 
