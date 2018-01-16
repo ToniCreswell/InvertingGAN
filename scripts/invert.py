@@ -120,7 +120,6 @@ def find_batch_z(gen, x, nz, lr, exDir, maxEpochs=100):
 
 	#visualise the final output
 	xHAT = gen.forward(Zinit)
-	print xHAT.min(), xHAT.max()
 	save_image(xHAT.data, join(exDir, 'rec.png'), normalize=True)
 	save_image(x.data, join(exDir, 'original.png'), normalize=True)
 
