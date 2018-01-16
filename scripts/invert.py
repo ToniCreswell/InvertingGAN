@@ -101,7 +101,7 @@ def find_batch_z(gen, x, nz, lr, exDir, maxEpochs=100):
 	#optimizer
 	optZ = torch.optim.RMSprop([Zinit], lr=lr)
 
-	losses = {'rec': []}
+	losses = {'rec': [], 'meanZ': []}
 	for e in range(maxEpochs):
 
 		xHAT = gen.forward(Zinit)
@@ -116,6 +116,7 @@ def find_batch_z(gen, x, nz, lr, exDir, maxEpochs=100):
 		optZ.step()
 
 		losses['rec'].append(recLoss.data[0])
+		losses['meanZ'].append(regMean.data[0])
 		print '[%d] loss: %0.5f, regMean: %0.5f' % (e, recLoss.data[0], regMean.data[0])
 
 		if e%100==0:
