@@ -88,7 +88,7 @@ def find_z(gen, x, nz, lr, exDir, maxEpochs=100, alpha=1e-6):
 	return Zinit
 
 
-def find_batch_z(gen, x, nz, lr, exDir, maxEpochs=100):
+def find_batch_z(gen, x, nz, lr, exDir, maxEpochs=100, alpha=1e-6):
 
 	#generator in eval mode
 	gen.eval()
