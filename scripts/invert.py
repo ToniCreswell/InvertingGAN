@@ -65,8 +65,7 @@ def find_z(gen, x, nz, lr, exDir, maxEpochs=100):
 	for e in range(maxEpochs):
 
 		xHAT = gen.forward(Zinit)
-		# recLoss = F.mse_loss(x, xHAT)
-		recLoss = (x - xHAT).pow(2).mean()
+		recLoss = F.mse_loss(xHAT, x)
 
 		optZ.zero_grad()
 		recLoss.backward()
