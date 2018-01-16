@@ -114,7 +114,7 @@ def find_batch_z(gen, x, nz, lr, exDir, maxEpochs=100):
 		losses['rec'].append(recLoss.data[0])
 		print '[%d] loss: %0.5f' % (e, recLoss.data[0])
 
-		if e%100:
+		if e%100==0:
 			save_image(xHAT.data, join(exDir, 'rec'+str(e)+'.png'), normalize=True)
 
 		#plot training losses
