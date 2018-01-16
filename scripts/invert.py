@@ -114,16 +114,16 @@ def find_batch_z(gen, x, nz, lr, exDir, maxEpochs=100, alpha=1e-6):
 
 		#loss to make sure z's are Guassian
 		logProb = pdf.log_prob(Zinit).mean(dim=1)  #each element of Z is independant, so likelihood is a sum of log of elements
-		recLoss -= (alpha * logProb.mean())
+		loss = recLoss - (alpha * logProb.mean())
 		
 
 		optZ.zero_grad()
-		recLoss.backward()
+		loss.backward()
 		optZ.step()
 
 		losses['rec'].append(recLoss.data[0])
 		losses['logProb'].append(logProb.mean().data[0])
-		print '[%d] loss: %0.5f, regMean: %0.5f' % (e, recLoss.data[0], logProb.mean().data[0])
+		print '[%d] loss: %0.5f, recLoss: %0.5f, regMean: %0.5f' % (e, loss.data[0], recLoss.data[0], logProb.mean().data[0])
 
 		if e%100==0:
 			save_image(xHAT.data, join(exDir, 'rec'+str(e)+'.png'))
