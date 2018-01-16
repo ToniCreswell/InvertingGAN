@@ -80,8 +80,8 @@ def find_z(gen, x, nz, lr, exDir, maxEpochs=100):
 
 	#visualise the final output
 	xHAT = gen.forward(Zinit)
-	save_image(xHAT.data, join(exDir, 'rec'+str(e)+'.png'))
-	save_image(x.data, join(exDir, 'original'+str(e)+'.png'))
+	save_image(xHAT.data, join(exDir, 'rec.png'))
+	save_image(x.data, join(exDir, 'original.png'))
 
 	return Zinit
 
