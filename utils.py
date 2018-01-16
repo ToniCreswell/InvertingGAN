@@ -57,11 +57,12 @@ def plot_norm_losses(losses, exDir, epochs=1, title='loss'):
 		y /= ( np.std(y) + 1e-6 ) 
 		noPoints = len(losses[key])
 		factor = float(noPoints)/epochs
-		plt.plot(np.arange(len(losses[key]))/factor,y, label=key)
+		plt.plot(np.arange(len(losses[key]))/factor, y, label=key)
 	plt.xlabel('epoch')
 	plt.ylabel('normalised loss')
 	plt.legend()
 	fig1.savefig(join(exDir, 'norm_'+title+'_plt.png'))
+
 
 def save_input_args(exDir, opts):
 	#save the input args to 
