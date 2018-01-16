@@ -115,7 +115,6 @@ def find_batch_z(gen, x, nz, lr, exDir, maxEpochs=100):
 		logProb = pdf.log_prob(Zinit).sum(axis=1)  #each element of Z is independant, so likelihood is a sum of log of elements
 		print 'logProb shape:', logProb #shape should be N,1
 		recLoss += logProb.mean()
-
 		
 
 		optZ.zero_grad()
