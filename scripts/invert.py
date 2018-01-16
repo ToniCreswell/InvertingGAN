@@ -55,8 +55,48 @@ def find_z(gen, x, nz, lr, exDir, maxEpochs=100):
 
 	if gen.useCUDA:
 		gen.cuda()
+		Zinit = Variable(torch.randn(x.size(0),opts.nz).cuda(), requires_grad=True)
+	else:
+		Zinit = Variable(torch.randn(x.size(0),opts.nz), requires_grad=True)
 
-	Zinit = Variable(torch.randn(1,opts.nz).cuda(), requires_grad=True)
+	#optimizer
+	optZ = torch.optim.RMSprop([Zinit], lr=lr)
+
+	losses = {'rec': []}
+	for e in range(maxEpochs):
+
+		xHAT = gen.forward(Zinit)
+		recLoss = F.mse_loss(xHAT, x)
+
+		optZ.zero_grad()
+		recLoss.backward()
+		optZ.step()
+
+		losses['rec'].append(recLoss.data[0])
+		print '[%d] loss: %0.5f' % (e, recLoss.data[0])
+
+		#plot training losses
+		if e>0:
+			plot_losses(losses, exDir, e+1)
+
+	#visualise the final output
+	xHAT = gen.forward(Zinit)
+	save_image(xHAT.data, join(exDir, 'rec.png'))
+	save_image(x.data, join(exDir, 'original.png'))
+
+	return Zinit
+
+
+def find_batch_z(gen, x, nz, lr, exDir, maxEpochs=100):
+
+	#generator in eval mode
+	gen.eval()
+
+	if gen.useCUDA:
+		gen.cuda()
+		Zinit = Variable(torch.randn(x.size(0),opts.nz).cuda(), requires_grad=True)
+	else:
+		Zinit = Variable(torch.randn(x.size(0),opts.nz), requires_grad=True)
 
 	#optimizer
 	optZ = torch.optim.RMSprop([Zinit], lr=lr)
