@@ -117,7 +117,7 @@ def find_batch_z(gen, x, nz, lr, exDir, maxEpochs=100):
 		optZ.step()
 
 		losses['rec'].append(recLoss.data[0])
-		print '[%d] loss: %0.5f, reg: %0.5f' % (e, recLoss.data[0], reg.data[0])
+		print '[%d] loss: %0.5f, regMean: %0.5f' % (e, recLoss.data[0], reg.data[0])
 
 		if e%100==0:
 			save_image(xHAT.data, join(exDir, 'rec'+str(e)+'.png'))
