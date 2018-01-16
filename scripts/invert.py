@@ -107,8 +107,10 @@ def find_batch_z(gen, x, nz, lr, exDir, maxEpochs=100):
 		xHAT = gen.forward(Zinit)
 		recLoss = F.mse_loss(xHAT, x)
 
-		reg = Zinit.mean.pow(2)
-		recLoss += reg
+		regMean = Zinit.mean().pow(2)
+		recLoss += regMean
+		# regSTD = (Zinit.std - 1).pow(2)
+		# recLoss += (regMean + regSTD)
 
 		optZ.zero_grad()
 		recLoss.backward()
