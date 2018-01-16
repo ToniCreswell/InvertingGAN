@@ -44,11 +44,12 @@ def get_args():
 	parser.add_argument('--fSize', default=64, type=int)  #multiple of filters to use
 	parser.add_argument('--exDir', required=True, type=str)
 	parser.add_argument('--gpuNo', default=0, type=int)
+	parser.add_argument('--alpha', default=1e-6, type=float)
 
 	return parser.parse_args()
 
 
-def find_z(gen, x, nz, lr, exDir, maxEpochs=100):
+def find_z(gen, x, nz, lr, exDir, maxEpochs=100, alpha=1e-6):
 
 	#generator in eval mode
 	gen.eval()
@@ -112,8 +113,8 @@ def find_batch_z(gen, x, nz, lr, exDir, maxEpochs=100):
 		recLoss = F.mse_loss(xHAT, x)
 
 		#loss to make sure z's are Guassian
-		logProb = pdf.log_prob(Zinit).sum(dim=1)  #each element of Z is independant, so likelihood is a sum of log of elements
-		recLoss += logProb.mean()
+		logProb = pdf.log_prob(Zinit).mean(dim=1)  #each element of Z is independant, so likelihood is a sum of log of elements
+		recLoss -= (alpha * logProb.mean())
 		
 
 		optZ.zero_grad()
