@@ -92,6 +92,9 @@ def find_batch_z(gen, x, nz, lr, exDir, maxEpochs=100):
 	#generator in eval mode
 	gen.eval()
 
+	#Assume the prior is Standard Normal
+	pdf = torch.distributions.Normal(0, 1)
+
 	if gen.useCUDA:
 		gen.cuda()
 		Zinit = Variable(torch.randn(x.size(0),opts.nz).cuda(), requires_grad=True)
@@ -104,12 +107,16 @@ def find_batch_z(gen, x, nz, lr, exDir, maxEpochs=100):
 	losses = {'rec': [], 'meanZ': []}
 	for e in range(maxEpochs):
 
+		#reconstruction loss
 		xHAT = gen.forward(Zinit)
 		recLoss = F.mse_loss(xHAT, x)
 
-		regMean = Zinit.mean().abs()
-		regSTD = (Zinit.std() - 1.).abs()
-		recLoss += (regMean + regSTD)
+		#loss to make sure z's are Guassian
+		logProb = pdf.log_prob(Zinit).sum(axis=1)  #each element of Z is independant, so likelihood is a sum of log of elements
+		print 'logProb shape:', logProb #shape should be N,1
+		recLoss += logProb.mean()
+
+		
 
 		optZ.zero_grad()
 		recLoss.backward()
