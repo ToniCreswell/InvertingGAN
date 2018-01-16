@@ -157,7 +157,7 @@ if __name__=='__main__':
 	transform = transforms.Compose([transforms.ToTensor(), \
 		transforms.Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5))])
 	testDataset = CELEBA(root=opts.root, train=False, transform=transform, Ntest=100)  #most models trained with Ntest=1000, but using 100 to prevent memory errors
-	testLoader = torch.utils.data.DataLoader(testDataset, batch_size=1, shuffle=False)
+	testLoader = torch.utils.data.DataLoader(testDataset, batch_size=opts.batchSize, shuffle=False)
 	print 'Data loaders ready.'
 
 	###### Create model and load parameters #####
@@ -171,7 +171,7 @@ if __name__=='__main__':
 	#Find each z individually for each x
 	for i, data in enumerate(testLoader):
 		x, y = prep_data(data, useCUDA=gen.useCUDA)
-		z = find_z(gen=gen, x=x, nz=opts.nz, lr=opts.lr, exDir=exDir, maxEpochs=opts.maxEpochs)
+		z = find_batch_z(gen=gen, x=x, nz=opts.nz, lr=opts.lr, exDir=exDir, maxEpochs=opts.maxEpochs)
 
 		break
 
