@@ -49,7 +49,7 @@ def get_args():
 	return parser.parse_args()
 
 
-def find_z(gen, x, nz, lr, exDir, maxEpochs=100, alpha=1e-6):
+def find_z(gen, x, nz, lr, exDir, maxEpochs=100):
 
 	#generator in eval mode
 	gen.eval()
@@ -131,6 +131,7 @@ def find_batch_z(gen, x, nz, lr, exDir, maxEpochs=100, alpha=1e-6):
 		#plot training losses
 		if e>0:
 			plot_losses(losses, exDir, e+1)
+			plot_norm_losses(losses, exDir, e+1)
 
 	#visualise the final output
 	xHAT = gen.forward(Zinit)
