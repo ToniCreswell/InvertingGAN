@@ -66,7 +66,7 @@ def train_mode(gen, dis):
 	save_input_args(exDir, opts)
 
 	#noise level
-	noiseSigma = np.logspace(np.log2(0.5), np.log2(0.01), opts.maxEpochs, base=2)
+	noiseSigma = np.logspace(np.log2(0.5), np.log2(0.001), opts.maxEpochs, base=2)
 
 	####### Start Training #######
 	losses = {'gen':[], 'dis':[]}
