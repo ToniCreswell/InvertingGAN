@@ -186,7 +186,7 @@ if __name__=='__main__':
 	#Find each z individually for each x
 	for i, data in enumerate(testLoader):
 		x, y = prep_data(data, useCUDA=gen.useCUDA)
-		z = find_batch_z(gen=gen, x=x, nz=opts.nz, lr=opts.lr, exDir=exDir, maxEpochs=opts.maxEpochs)
+		z = find_batch_z(gen=gen, x=x, nz=opts.nz, lr=opts.lr, exDir=exDir, maxEpochs=opts.maxEpochs, alpha=opts.alpha)
 
 		break
 
