@@ -39,21 +39,22 @@ def get_args():
 	parser = argparse.ArgumentParser()
 	parser.add_argument('--root', default='../../../../data/', type=str)
 	parser.add_argument('--batchSize', default=128, type=int)
-	parser.add_argument('--maxEpochs', default=200, type=int)
+	parser.add_argument('--maxEpochs', default=25, type=int)
 	parser.add_argument('--nz', default=100, type=int)
 	parser.add_argument('--lr', default=2e-4, type=float)
 	parser.add_argument('--fSize', default=64, type=int)  #multiple of filters to use
 	parser.add_argument('--outDir', default='../../Experiments/', type=str)
 	parser.add_argument('--commit', required=True, type=str)
 	parser.add_argument('--gpuNo', default=0, type=int)
+	parser.add_argument('--useNoise', action='store_true')
 
 	return parser.parse_args()
 
 
 def train_mode(gen, dis):
 	####### Define optimizer #######
-	genOptimizer = optim.RMSprop(gen.parameters(), lr=opts.lr, momentum=0.5)
-	disOptimizer = optim.RMSprop(dis.parameters(), lr=opts.lr, momentum=0.5)
+	genOptimizer = optim.Adam(gen.parameters(), lr=opts.lr, betas=(opt.beta1, 0.999))
+	disOptimizer = optim.Adam(dis.parameters(), lr=opts.lr, betas=(opt.beta1, 0.999))
 
 	if gen.useCUDA:
 		torch.cuda.set_device(opts.gpuNo)
