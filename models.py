@@ -21,13 +21,13 @@ class GEN(nn.Module):
 		self.useCUDA = torch.cuda.is_available()
 
 		self.gen1 = nn.Linear(nz, (fSize * 8) * inSize * inSize)
-		self.gen2 = nn.ConvTranspose2d(fSize * 8, fSize * 4, 3, stride=2, padding=1, output_padding=1)
+		self.gen2 = nn.ConvTranspose2d(fSize * 8, fSize * 4, 4, stride=2, padding=1, bias=False)
 		self.gen2b = nn.BatchNorm2d(fSize * 4)
-		self.gen3 = nn.ConvTranspose2d(fSize * 4, fSize * 2, 3, stride=2, padding=1, output_padding=1)
+		self.gen3 = nn.ConvTranspose2d(fSize * 4, fSize * 2, 4, stride=2, padding=1, bias=False)
 		self.gen3b = nn.BatchNorm2d(fSize * 2)
-		self.gen4 = nn.ConvTranspose2d(fSize * 2, fSize, 3, stride=2, padding=1, output_padding=1)
+		self.gen4 = nn.ConvTranspose2d(fSize * 2, fSize, 4, stride=2, padding=1, bias=False)
 		self.gen4b = nn.BatchNorm2d(fSize)
-		self.gen5 = nn.ConvTranspose2d(fSize, 3, 3, stride=2, padding=1, output_padding=1)
+		self.gen5 = nn.ConvTranspose2d(fSize, 3, 4, stride=2, padding=1, bias=False)
 
 	def sample_z(self, no_samples):
 		z = Variable(torch.randn(no_samples, self.nz))
@@ -76,13 +76,13 @@ class DIS(nn.Module):
 
 		inSize = imSize / ( 2 ** 4)
 
-		self.dis1 = nn.Conv2d(3, fSize, 5, stride=2, padding=2)  #6 cause 2 images are concatenated in the feature channel
+		self.dis1 = nn.Conv2d(3, fSize, 4, stride=2, padding=1, bias=False)  #6 cause 2 images are concatenated in the feature channel
 		self.dis1b = nn.BatchNorm2d(fSize)
-		self.dis2 = nn.Conv2d(fSize, fSize * 2, 5, stride=2, padding=2)
+		self.dis2 = nn.Conv2d(fSize, fSize * 2, 4, stride=2, padding=1, bias=False)
 		self.dis2b = nn.BatchNorm2d(fSize * 2)
-		self.dis3 = nn.Conv2d(fSize * 2, fSize * 4, 5, stride=2, padding=2)
+		self.dis3 = nn.Conv2d(fSize * 2, fSize * 4, 4, stride=2, padding=1, bias=False)
 		self.dis3b = nn.BatchNorm2d(fSize * 4)
-		self.dis4 = nn.Conv2d(fSize * 4, fSize * 8, 5, stride=2, padding=2)
+		self.dis4 = nn.Conv2d(fSize * 4, fSize * 8, 4, stride=2, padding=1, bias=False)
 		self.dis4b = nn.BatchNorm2d(fSize * 8)
 		self.dis5 = nn.Linear((fSize * 8) * inSize * inSize, 1)
 	
