@@ -51,7 +51,7 @@ def get_args():
 	return parser.parse_args()
 
 
-def train_mode(gen, dis):
+def train_mode(gen, dis, useNoise=False):
 	####### Define optimizer #######
 	genOptimizer = optim.Adam(gen.parameters(), lr=opts.lr, betas=(opt.beta1, 0.999))
 	disOptimizer = optim.Adam(dis.parameters(), lr=opts.lr, betas=(opt.beta1, 0.999))
@@ -87,13 +87,16 @@ def train_mode(gen, dis):
 			xReal = Variable(data[0])
 			if gen.useCUDA:
 				xReal = xReal.cuda()
-			xReal = corrupt(xReal, noiseLevel) #add a little noise
+
+			if useNoise:
+				xReal = corrupt(xReal, noiseLevel) #add a little noise
 
 
 			####### Calculate discriminator loss #######
 			noSamples = xReal.size(0)
 			xFake = gen.sample_x(noSamples)
-			xFake = corrupt(xFake, noiseLevel) #add a little noise
+			if useNoise:
+				xFake = corrupt(xFake, noiseLevel) #add a little noise
 			pReal_D = dis.forward(xReal)
 			pFake_D = dis.forward(xFake.detach())
 
@@ -105,7 +108,8 @@ def train_mode(gen, dis):
 
 			####### Calculate generator loss #######
 			xFake_ = gen.sample_x(noSamples)
-			xFake_ = corrupt(xFake_, noiseLevel) #add a little noise
+			if useNoise:
+				xFake_ = corrupt(xFake_, noiseLevel) #add a little noise
 			pFake_G = dis.forward(xFake_)
 			genLoss = F.binary_cross_entropy(pFake_G, real)
 
@@ -167,5 +171,5 @@ if __name__=='__main__':
 	gen = GEN(imSize=IM_SIZE, nz=opts.nz, fSize=opts.fSize)
 	dis = DIS(imSize=IM_SIZE, fSize=opts.fSize)
 
-	gen, dis = train_mode(gen, dis)
+	gen, dis = train_mode(gen, dis, useNoise=opts.useNoise)
 
