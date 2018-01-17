@@ -51,7 +51,7 @@ def get_args():
 	return parser.parse_args()
 
 
-def train_mode(gen, dis, useNoise=False, beta1=beta1):
+def train_mode(gen, dis, useNoise=False, beta1=0.5):
 	####### Define optimizer #######
 	genOptimizer = optim.Adam(gen.parameters(), lr=opts.lr, betas=(beta1, 0.999))
 	disOptimizer = optim.Adam(dis.parameters(), lr=opts.lr, betas=(beta1, 0.999))
