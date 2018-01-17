@@ -171,5 +171,5 @@ if __name__=='__main__':
 	gen = GEN(imSize=IM_SIZE, nz=opts.nz, fSize=opts.fSize)
 	dis = DIS(imSize=IM_SIZE, fSize=opts.fSize)
 
-	gen, dis = train_mode(gen, dis, useNoise=opts.useNoise, beta1=opts.beta1)
+	gen, dis = train_mode(gen, dis, useNoise=opts.useNoise, beta1=0.5)
 
