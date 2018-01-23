@@ -105,7 +105,7 @@ def train_mode(gen, dis, useNoise=False, beta1=0.5):
 			fake = dis.zeros(xFake.size(0))
 
 			disLoss = opts.pi * F.binary_cross_entropy(pReal_D, real) + \
-						(1 - opts.pi) * F.binary_cross_entropy(pFake_D, fake))
+						(1 - opts.pi) * F.binary_cross_entropy(pFake_D, fake)
 
 			####### Calculate generator loss #######
 			xFake_ = gen.sample_x(noSamples)
