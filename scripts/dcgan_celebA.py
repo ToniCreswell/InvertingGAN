@@ -47,6 +47,7 @@ def get_args():
 	parser.add_argument('--commit', required=True, type=str)
 	parser.add_argument('--gpuNo', default=0, type=int)
 	parser.add_argument('--useNoise', action='store_true')
+	parser.add_argument('--pi', default=0.5, type=float)
 
 	return parser.parse_args()
 
@@ -103,8 +104,8 @@ def train_mode(gen, dis, useNoise=False, beta1=0.5):
 			real = dis.ones(xReal.size(0))
 			fake = dis.zeros(xFake.size(0))
 
-			disLoss = 0.5 * (F.binary_cross_entropy(pReal_D, real) + \
-						F.binary_cross_entropy(pFake_D, fake))
+			disLoss = opts.pi * F.binary_cross_entropy(pReal_D, real) + \
+						(1 - opts.pi) * F.binary_cross_entropy(pFake_D, fake))
 
 			####### Calculate generator loss #######
 			xFake_ = gen.sample_x(noSamples)
@@ -136,7 +137,7 @@ def train_mode(gen, dis, useNoise=False, beta1=0.5):
 		print 'Outputs will be saved to:',exDir
 		#save some samples
 		samples = gen.sample_x(49)
-		save_image(samples.data, join(exDir,'epoch'+str(e)+'.png'))
+		save_image(samples.data, join(exDir,'epoch'+str(e)+'.png'), Normalize=True)
 
 		#plot
 		plot_losses(losses, exDir)
