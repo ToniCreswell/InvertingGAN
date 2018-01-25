@@ -126,7 +126,7 @@ def find_batch_z(gen, x, nz, lr, exDir, maxEpochs=100, alpha=1e-6):
 
 		if e%100==0:
 			print '[%d] loss: %0.5f, recLoss: %0.5f, regMean: %0.5f' % (e, loss.data[0], recLoss.data[0], logProb.mean().data[0])
-			save_image(xHAT.data+1/2, join(exDir, 'rec'+str(e)+'.png'))
+			save_image(xHAT.data, join(exDir, 'rec'+str(e)+'.png'), normalize=True)
 
 		#plot training losses
 		if e>0:
@@ -139,19 +139,6 @@ def find_batch_z(gen, x, nz, lr, exDir, maxEpochs=100, alpha=1e-6):
 	save_image(x.data, join(exDir, 'original.png'), normalize=True)
 
 	return Zinit
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 if __name__=='__main__':

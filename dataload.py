@@ -92,3 +92,96 @@ class CELEBA(data.Dataset):
         assert os.path.exists(join(inDir, 'yAllTrain.npy'))
 
 
+class SHOES(data.Dataset):
+    """
+    Args:
+        root (string): Root directory of dataset where directory
+            ``SHOES`` exists.
+        train (bool, optional): If True, creates dataset from training set, otherwise
+            creates from test set.
+        transform (callable, optional): A function/transform that  takes in an PIL image
+            and returns a transformed version. E.g, ``transforms.RandomCrop``
+        target_transform (callable, optional): A function/transform that takes in the
+            target and transforms it.
+        download (bool, optional): If true, downloads the dataset from the internet and
+            puts it in root directory. If dataset is already downloaded, it is not
+            downloaded again.
+        grain: 'None', 'fine', 'subfine'
+            None: Boots','Sandals', 'Shoes', 'Slippers'
+            fine: c. 20 sub categories
+            subfine: c.3000 subsub categories
+    """
+
+
+    def __init__(self, root, train=True, grain=None, transform=None, Ntest=1000):
+        
+
+        self.root = os.path.expanduser(root)
+        self.train = train  # training set or test set
+        self.filename='SHOES'
+        self.transform=transform
+        self.labels = ['Boots','Sandals', 'Shoes', 'Slippers']
+        self.grain = grain
+
+        # now load the picked numpy arrays
+        if self.train:
+            self.train_data = np.load(join(self.root, self.filename, 'xShoes.npy'), mmap_mode='r')[Ntest:]
+            self.train_data = self.train_data.transpose((0, 2, 3, 1))  # convert to HWC
+            
+            #get the right granularity for the labels
+            if grain is None:
+                train_labels = np.load(join(self.root, self.filename, 'yShoes.npy'))[Ntest:]
+            else:
+                train_labels = np.load(join(self.root, self.filename, grain+'Shoes.npy'))[Ntest:]
+            self.train_labels = train_labels.astype(int)
+            print np.shape(self.train_labels), np.shape(self.train_data)
+            print np.unique(self.train_labels)
+
+        else: #test
+            self.test_data = np.load(join(self.root, self.filename, 'xShoes.npy'), mmap_mode='r')[:Ntest]
+            if grain is None:
+                test_labels = np.load(join(self.root, self.filename, 'yShoes.npy'))[:Ntest]
+            else:
+                test_labels = np.load(join(self.root, self.filename, grain+'Shoes.npy'))[:Ntest]
+            self.test_labels = test_labels.astype(int)
+
+
+    def __getitem__(self, index):
+        """
+        Args:
+            index (int): Index
+        Returns:
+            tuple: (image, target) where target is index of the target class.
+        """
+
+        if self.train:
+            img, target = self.train_data[index], self.train_labels[index]
+        else:
+            img, target = self.test_data[index], self.test_labels[index]
+            
+
+        # doing this so that it is consistent with all other datasets
+        # to return a PIL Image
+        img = Image.fromarray(img)
+
+        if self.transform is not None:
+            img = self.transform(img)
+
+        target = target.astype(int)
+
+
+        return img, target
+
+    def __len__(self):
+        if self.train:
+            return len(self.train_data)
+        else:
+            return len(self.test_data)
+
+    def _check_dir_exist(self):
+        inDir=join(self.root, self.filename)
+        assert os.path.isdir(inDir)
+        assert os.path.exists(join(inDir, 'xTrain.npy'))
+        assert os.path.exists(join(inDir, 'yAllTrain.npy'))
+
+
