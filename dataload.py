@@ -126,7 +126,7 @@ class SHOES(data.Dataset):
         # now load the picked numpy arrays
         if self.train:
             self.train_data = np.load(join(self.root, self.filename, 'xShoes.npy'), mmap_mode='r')[Ntest:]
-            self.train_data = self.train_data.transpose((0, 2, 3, 1))  # convert to HWC
+            # self.train_data = self.train_data.transpose((0, 2, 3, 1))  # convert to HWC
             
             #get the right granularity for the labels
             if grain is None:
