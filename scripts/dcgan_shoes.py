@@ -43,7 +43,7 @@ def get_args():
 	parser.add_argument('--nz', default=100, type=int)
 	parser.add_argument('--lr', default=2e-4, type=float)
 	parser.add_argument('--fSize', default=64, type=int)  #multiple of filters to use
-	parser.add_argument('--outDir', default='../../Experiments/', type=str)
+	parser.add_argument('--outDir', default='../../Experiments/SHOES', type=str)
 	parser.add_argument('--commit', required=True, type=str)
 	parser.add_argument('--gpuNo', default=0, type=int)
 	parser.add_argument('--useNoise', action='store_true')
