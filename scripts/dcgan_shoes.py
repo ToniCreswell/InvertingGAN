@@ -48,6 +48,7 @@ def get_args():
 	parser.add_argument('--gpuNo', default=0, type=int)
 	parser.add_argument('--useNoise', action='store_true')
 	parser.add_argument('--pi', default=0.5, type=float)
+	parser.add_argument('--imSize', default=128, type=int)
 
 	return parser.parse_args()
 
@@ -154,7 +155,7 @@ if __name__=='__main__':
 	opts = get_args()
 
 	####### Data set #######
-	IM_SIZE = 128
+	IM_SIZE = opts.imSize
 	print 'Prepare data loaders...'
 	transform = transforms.Compose([transforms.ToTensor(), transforms.Resize(IM_SIZE), \
 		transforms.Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5)), transforms.RandomHorizontalFlip()])
