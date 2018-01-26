@@ -137,7 +137,7 @@ def train_mode(gen, dis, useNoise=False, beta1=0.5):
 		print 'Outputs will be saved to:',exDir
 		#save some samples
 		samples = gen.sample_x(49)
-		save_image(samples.data, join(exDir,'epoch'+str(e)+'.png'))
+		save_image(samples.data, join(exDir,'epoch'+str(e)+'.png'), normalize=True)
 
 		#plot
 		plot_losses(losses, exDir, epochs=e+1)
