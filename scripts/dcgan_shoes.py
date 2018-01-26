@@ -53,7 +53,7 @@ def get_args():
 	return parser.parse_args()
 
 
-def train_mode(gen, dis, useNoise=False, beta1=0.5):
+def train_mode(gen, dis, trainLoader, useNoise=False, beta1=0.5):
 	####### Define optimizer #######
 	genOptimizer = optim.Adam(gen.parameters(), lr=opts.lr, betas=(beta1, 0.999))
 	disOptimizer = optim.Adam(dis.parameters(), lr=opts.lr, betas=(beta1, 0.999))
@@ -175,5 +175,5 @@ if __name__=='__main__':
 	gen = GEN(imSize=IM_SIZE, nz=opts.nz, fSize=opts.fSize)
 	dis = DIS(imSize=IM_SIZE, fSize=opts.fSize)
 
-	gen, dis = train_mode(gen, dis, useNoise=opts.useNoise, beta1=0.5)
+	gen, dis = train_mode(gen, dis, trainLoader, useNoise=opts.useNoise, beta1=0.5)
 
