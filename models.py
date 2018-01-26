@@ -65,6 +65,8 @@ class GEN(nn.Module):
 		print 'loading params...'
 		try:
 			self.load_state_dict(torch.load(join(exDir, 'gen_params'))
+		except:
+			print "try mapping..."
 		try:
 			self.load_state_dict(torch.load(join(exDir, 'gen_params'), map_location=lambda storage, loc: storage.cuda()))
 		except:
