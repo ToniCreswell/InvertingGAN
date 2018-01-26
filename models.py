@@ -63,13 +63,9 @@ class GEN(nn.Module):
 
 	def load_params(self, exDir, gpuNo=None):
 		print 'loading params...'
-		try:
+		if gpuNo is None:
 			self.load_state_dict(torch.load(join(exDir, 'gen_params')))
-		except:
-			print "try mapping..."
-		try:
-			self.load_state_dict(torch.load(join(exDir, 'gen_params'), map_location=lambda storage, loc: storage.cuda()))
-		except:
+		else:
 			self.load_state_dict(torch.load(join(exDir, 'gen_params'), map_location=lambda storage, loc: storage.cuda(gpuNo)))
 
 
