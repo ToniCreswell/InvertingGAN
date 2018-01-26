@@ -178,10 +178,5 @@ class SHOES(data.Dataset):
         else:
             return len(self.test_data)
 
-    def _check_dir_exist(self):
-        inDir=join(self.root, self.filename)
-        assert os.path.isdir(inDir)
-        assert os.path.exists(join(inDir, 'xTrain.npy'))
-        assert os.path.exists(join(inDir, 'yAllTrain.npy'))
 
 
