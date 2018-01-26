@@ -96,6 +96,8 @@ def train_mode(gen, dis, useNoise=False, beta1=0.5):
 
 			####### Calculate discriminator loss #######
 			noSamples = xReal.size(0)
+
+			print 'xReal:', xReal.size()
 			xFake = gen.sample_x(noSamples)
 			if useNoise:
 				xFake = corrupt(xFake, noiseLevel) #add a little noise
