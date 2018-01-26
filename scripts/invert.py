@@ -167,6 +167,9 @@ if __name__=='__main__':
 	IM_SIZE = 64
 
 	gen = GEN(imSize=IM_SIZE, nz=opts.nz, fSize=opts.fSize)
+	if gen.useCUDA:
+		torch.cuda.set_device(opts.gpuNo)
+		gen.cuda()
 	gen.load_params(opts.exDir, gpuNo=opts.gpuNo)
 	print 'params loaded'
 
