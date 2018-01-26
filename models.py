@@ -98,7 +98,7 @@ class DIS(nn.Module):
 		d = lrelu(self.dis3b(self.dis3(d)))
 		d = lrelu(self.dis4b(self.dis4(d)))
 		d = d.view(x.size(0), -1)
-		d = F.sigmoid(self.dis5(d)) #no sigmoid cause is a WGAN
+		d = F.sigmoid(self.dis5(d)) 
 
 		return d
 
