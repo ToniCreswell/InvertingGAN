@@ -48,7 +48,7 @@ def get_args():
 	parser.add_argument('--gpuNo', default=0, type=int)
 	parser.add_argument('--useNoise', action='store_true')
 	parser.add_argument('--pi', default=0.5, type=float)
-	parser.add_argument('--imSize', default=128, type=int)
+	parser.add_argument('--imSize', default=128, type=int)  #128, 96...
 
 	return parser.parse_args()
 
@@ -69,7 +69,7 @@ def train_mode(gen, dis, useNoise=False, beta1=0.5):
 	save_input_args(exDir, opts)
 
 	#noise level
-	noiseSigma = np.logspace(np.log2(0.5), np.log2(0.001), opts.maxEpochs, base=2)
+	noiseSigma = np.logspace(np.log2(0.75), np.log2(0.001), opts.maxEpochs, base=2)
 
 	####### Start Training #######
 	losses = {'gen':[], 'dis':[]}
