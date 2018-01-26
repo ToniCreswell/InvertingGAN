@@ -47,8 +47,6 @@ class GEN(nn.Module):
 		x = lrelu(self.gen4b(self.gen4(x)))
 		x = F.tanh(self.gen5(x))
 
-		print 'gen output size', x.size()
-
 		return x
 
 	def forward(self, z):
