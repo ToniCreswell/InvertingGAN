@@ -64,7 +64,7 @@ class GEN(nn.Module):
 	def load_params(self, exDir, gpuNo=None):
 		print 'loading params...'
 		try:
-			self.load_state_dict(torch.load(join(exDir, 'gen_params'))
+			self.load_state_dict(torch.load(join(exDir, 'gen_params')))
 		except:
 			print "try mapping..."
 		try:
