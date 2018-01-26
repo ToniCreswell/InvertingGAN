@@ -61,9 +61,15 @@ class GEN(nn.Module):
 		print 'saving params...'
 		torch.save(self.state_dict(), join(exDir, 'gen_params'))
 
-	def load_params(self, exDir):
+	def load_params(self, exDir, gpuNo=None):
 		print 'loading params...'
-		self.load_state_dict(torch.load(join(exDir, 'gen_params'), map_location=lambda storage, loc: storage.cuda()))
+		try:
+			self.load_state_dict(torch.load(join(exDir, 'gen_params'))
+		try:
+			self.load_state_dict(torch.load(join(exDir, 'gen_params'), map_location=lambda storage, loc: storage.cuda()))
+		except:
+			self.load_state_dict(torch.load(join(exDir, 'gen_params'), map_location=lambda storage, loc: storage.cuda(gpuNo)))
+
 
 
 
