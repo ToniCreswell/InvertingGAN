@@ -167,7 +167,7 @@ if __name__=='__main__':
 	IM_SIZE = 64
 
 	gen = GEN(imSize=IM_SIZE, nz=opts.nz, fSize=opts.fSize)
-	gen.load_params(opts.exDir)
+	gen.load_params(opts.exDir, gpuNo=opts.gpuNo)
 	print 'params loaded'
 
 
