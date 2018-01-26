@@ -97,6 +97,7 @@ def find_batch_z(gen, x, nz, lr, exDir, maxEpochs=100, alpha=1e-6):
 	pdf = torch.distributions.Normal(0, 1)
 
 	if gen.useCUDA:
+		torch.cuda.set_device(opts.gpuNo)
 		gen.cuda()
 		Zinit = Variable(torch.randn(x.size(0),opts.nz).cuda(), requires_grad=True)
 	else:
