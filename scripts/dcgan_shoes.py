@@ -159,13 +159,13 @@ if __name__=='__main__':
 	####### Data set #######
 	IM_SIZE = opts.imSize
 	print 'Prepare data loaders...'
-	transform = transforms.Compose([transforms.ToPILImage, transforms.Resize((IM_SIZE, IM_SIZE)), \
+	transform = transforms.Compose([transforms.ToPILImage(), transforms.Resize((IM_SIZE, IM_SIZE)), \
 	 transforms.ToTensor(), transforms.Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5)), \
 	 transforms.RandomHorizontalFlip()])
 	trainDataset = SHOES(root=opts.root, train=True, transform=transform)
 	trainLoader = torch.utils.data.DataLoader(trainDataset, batch_size=opts.batchSize, shuffle=True)
 
-	transform = transforms.Compose([ transforms.ToPILImage, transforms.Resize((IM_SIZE, IM_SIZE)), \
+	transform = transforms.Compose([ transforms.ToPILImage(), transforms.Resize((IM_SIZE, IM_SIZE)), \
 		transforms.ToTensor(), transforms.Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5))])
 	testDataset = SHOES(root=opts.root, train=False, transform=transform)
 	testLoader = torch.utils.data.DataLoader(testDataset, batch_size=opts.batchSize, shuffle=False)
