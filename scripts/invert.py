@@ -156,6 +156,8 @@ if __name__=='__main__':
 	save_input_args(exDir, opts)
 
 	####### Test data set #######
+	IM_SIZE = opts.imSize
+	
 	print 'Prepare data loaders...'
 	transform = transforms.Compose([ transforms.ToPILImage(), transforms.Resize((IM_SIZE, IM_SIZE)), \
 		transforms.ToTensor(), transforms.Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5))])
@@ -167,7 +169,6 @@ if __name__=='__main__':
 	print 'Data loaders ready.'
 
 	###### Create model and load parameters #####
-	IM_SIZE = opts.imSize
 
 	gen = GEN(imSize=IM_SIZE, nz=opts.nz, fSize=opts.fSize)
 	if gen.useCUDA:
