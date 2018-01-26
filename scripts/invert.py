@@ -40,6 +40,7 @@ def get_args():
 	parser.add_argument('--batchSize', default=128, type=int)
 	parser.add_argument('--maxEpochs', default=200, type=int)
 	parser.add_argument('--nz', default=100, type=int)
+	parser.add_argument('--imSize', default=64, type=int)
 	parser.add_argument('--lr', default=2e-4, type=float)
 	parser.add_argument('--fSize', default=64, type=int)  #multiple of filters to use
 	parser.add_argument('--exDir', required=True, type=str)
@@ -162,7 +163,7 @@ if __name__=='__main__':
 	print 'Data loaders ready.'
 
 	###### Create model and load parameters #####
-	IM_SIZE = 64
+	IM_SIZE = opts.imSize
 
 	gen = GEN(imSize=IM_SIZE, nz=opts.nz, fSize=opts.fSize)
 	if gen.useCUDA:
