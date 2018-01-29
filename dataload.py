@@ -121,27 +121,32 @@ class SHOES(data.Dataset):
         self.labels = ['Boots','Sandals', 'Shoes', 'Slippers']
         self.grain = grain
 
+        ####### Shuffel data same way each time #######
+        np.random.seed(1993)
+        rndIdx = np.random.permutation(self.data.size(0))
+
+        #load data
+        xData = np.load(join(self.root, self.filename, 'xShoes.npy'), mmap_mode='r')
+        if grain is None:  #get right grandularity of labels
+            yData = np.load(join(self.root, self.filename, 'yShoes.npy'), mmap_mode='r')
+        else:
+            yData = np.load(join(self.root, self.filename, grain+'Shoes.npy'), mmap_mode='r')
+        
+        #shuffel data
+        xData = self.data[rndIdx]
+        yData = self.data[rndIdx]
+
         # now load the picked numpy arrays
         if self.train:
-            self.train_data = np.load(join(self.root, self.filename, 'xShoes.npy'), mmap_mode='r')[Ntest:]
-            # self.train_data = self.train_data.transpose((0, 3, 1, 2))  # convert to CWH
-            
-            #get the right granularity for the labels
-            if grain is None:
-                train_labels = np.load(join(self.root, self.filename, 'yShoes.npy'))[Ntest:]
-            else:
-                train_labels = np.load(join(self.root, self.filename, grain+'Shoes.npy'))[Ntest:]
+            self.train_data = xData[Ntest:]
+            self.train_labels = yData[Ntest:]
             self.train_labels = train_labels.astype(int)
             print np.shape(self.train_labels), np.shape(self.train_data)
             print np.unique(self.train_labels)
 
         else: #test
-            self.test_data = np.load(join(self.root, self.filename, 'xShoes.npy'), mmap_mode='r')[:Ntest]
-            # self.train_data = self.test_data.transpose((0, 3, 1, 2))  # convert to CWH
-            if grain is None:
-                test_labels = np.load(join(self.root, self.filename, 'yShoes.npy'))[:Ntest]
-            else:
-                test_labels = np.load(join(self.root, self.filename, grain+'Shoes.npy'))[:Ntest]
+            self.test_data = xData[:Ntest]
+            self.test_labels = yData[:Ntest]
             self.test_labels = test_labels.astype(int)
 
 
