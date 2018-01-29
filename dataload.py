@@ -139,7 +139,7 @@ class SHOES(data.Dataset):
         if self.train:
             self.train_data = xData[Ntest:]
             self.train_labels = yData[Ntest:]
-            self.train_labels = self.strain_labels.astype(int)
+            self.train_labels = self.train_labels.astype(int)
             print np.shape(self.train_labels), np.shape(self.train_data)
             print np.unique(self.train_labels)
 
