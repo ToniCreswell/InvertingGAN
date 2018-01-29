@@ -122,9 +122,6 @@ class SHOES(data.Dataset):
         self.grain = grain
 
         ####### Shuffel data same way each time #######
-        np.random.seed(1993)
-        rndIdx = np.random.permutation(self.data.size(0))
-
         #load data
         xData = np.load(join(self.root, self.filename, 'xShoes.npy'), mmap_mode='r')
         if grain is None:  #get right grandularity of labels
@@ -133,6 +130,8 @@ class SHOES(data.Dataset):
             yData = np.load(join(self.root, self.filename, grain+'Shoes.npy'), mmap_mode='r')
         
         #shuffel data
+        np.random.seed(1993)
+        rndIdx = np.random.permutation(xData.size(0))
         xData = xData[rndIdx]
         yData = yData[rndIdx]
 
