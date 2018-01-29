@@ -161,7 +161,7 @@ if __name__=='__main__':
 	print 'Prepare data loaders...'
 	transform = transforms.Compose([ transforms.ToPILImage(), transforms.Resize((IM_SIZE, IM_SIZE)), \
 		transforms.ToTensor(), transforms.Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5))])
-	if opts.data == CELEBA:
+	if opts.data == 'CELEBA':
 		testDataset = CELEBA(root=opts.root, train=False, transform=transform, Ntest=100)  #most models trained with Ntest=1000, but using 100 to prevent memory errors
 	else:
 		testDataset = SHOES(root=opts.root, train=False, transform=transform)
