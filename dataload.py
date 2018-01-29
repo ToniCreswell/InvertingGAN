@@ -133,8 +133,8 @@ class SHOES(data.Dataset):
             yData = np.load(join(self.root, self.filename, grain+'Shoes.npy'), mmap_mode='r')
         
         #shuffel data
-        xData = self.data[rndIdx]
-        yData = self.data[rndIdx]
+        xData = xData[rndIdx]
+        yData = yData[rndIdx]
 
         # now load the picked numpy arrays
         if self.train:
