@@ -131,7 +131,7 @@ class SHOES(data.Dataset):
         
         #shuffel data
         np.random.seed(1993)
-        rndIdx = np.random.permutation(xData.size(0))
+        rndIdx = np.random.permutation(np.shape(xData)[0])
         xData = xData[rndIdx]
         yData = yData[rndIdx]
 
