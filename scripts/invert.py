@@ -164,7 +164,7 @@ if __name__=='__main__':
 	if opts.data == 'CELEBA':
 		testDataset = CELEBA(root=opts.root, train=False, transform=transform, Ntest=100)  #most models trained with Ntest=1000, but using 100 to prevent memory errors
 	elif opts.data == 'OMNI':
-		testDataset = CELEBA(root=opts.root, train=False, transform=transform)
+		testDataset = OMNI(root=opts.root, train=False, transform=transform)
 	else:
 		testDataset = SHOES(root=opts.root, train=False, transform=transform)
 	testLoader = torch.utils.data.DataLoader(testDataset, batch_size=opts.batchSize, shuffle=False)
