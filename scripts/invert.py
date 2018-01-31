@@ -56,6 +56,9 @@ def find_z(gen, x, nz, lr, exDir, maxEpochs=100):
 	#generator in eval mode
 	gen.eval()
 
+	#save the "original" images
+	save_image(x.data, join(exDir, 'original.png'))
+
 	if gen.useCUDA:
 		gen.cuda()
 		Zinit = Variable(torch.randn(x.size(0),opts.nz).cuda(), requires_grad=True)
@@ -85,7 +88,6 @@ def find_z(gen, x, nz, lr, exDir, maxEpochs=100):
 	#visualise the final output
 	xHAT = gen.forward(Zinit)
 	save_image(xHAT.data, join(exDir, 'rec.png'))
-	save_image(x.data, join(exDir, 'original.png'))
 
 	return Zinit
 
