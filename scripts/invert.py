@@ -97,6 +97,9 @@ def find_batch_z(gen, x, nz, lr, exDir, maxEpochs=100, alpha=1e-6):
 	#generator in eval mode
 	gen.eval()
 
+	#save the "original" images
+	save_image(x.data, join(exDir, 'original.png'))
+
 	#Assume the prior is Standard Normal
 	pdf = torch.distributions.Normal(0, 1)
 
@@ -139,7 +142,6 @@ def find_batch_z(gen, x, nz, lr, exDir, maxEpochs=100, alpha=1e-6):
 	#visualise the final output
 	xHAT = gen.forward(Zinit)
 	save_image(xHAT.data, join(exDir, 'rec.png'), normalize=True)
-	save_image(x.data, join(exDir, 'original.png'), normalize=True)
 
 	return Zinit
 
