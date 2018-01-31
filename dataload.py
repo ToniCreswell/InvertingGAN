@@ -217,11 +217,9 @@ class OMNI(data.Dataset): #omniglot
             xData = np.load(join(self.root, self.filename, 'omni_back_X.npy'), mmap_mode='r')
             yData = np.load(join(self.root, self.filename, 'omni_back_Y.npy'), mmap_mode='r')
             
-            np.random.seed(1993)
-            rndIdx = np.random.permutation(np.shape(xData)[0])
             
-            self.train_data = xData[rndIdx].transpose((0, 2, 3, 1)) 
-            self.train_labels = yData[rndIdx]
+            self.train_data = xData.transpose((0, 2, 3, 1)) 
+            self.train_labels = yData
             self.train_labels = self.train_labels.astype(int)
             print np.shape(self.train_labels), np.shape(self.train_data)
             print np.unique(self.train_labels)
@@ -230,8 +228,11 @@ class OMNI(data.Dataset): #omniglot
             xData = np.load(join(self.root, self.filename, 'omni_eval_X.npy'), mmap_mode='r')
             yData = np.load(join(self.root, self.filename, 'omni_eval_Y.npy'), mmap_mode='r')
             
-            self.test_data = xData.transpose((0, 2, 3, 1)) 
-            self.test_labels = yData
+            np.random.seed(1993)
+            rndIdx = np.random.permutation(np.shape(xData)[0])
+
+            self.test_data = xData[rndIdx].transpose((0, 2, 3, 1)) 
+            self.test_labels = yData[rndIdx]
             self.test_labels = self.test_labels.astype(int)
 
 
