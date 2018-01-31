@@ -1,4 +1,4 @@
-# DCGAN to be trained on CelebA with no labels and have params stored
+# DCGAN to be trained on the omniglot dataset with no labels and have params stored
 import sys
 sys.path.append('../')
 
@@ -157,12 +157,12 @@ if __name__=='__main__':
 	print 'Prepare data loaders...'
 	transform = transforms.Compose([transforms.ToPILImage(), transforms.RandomHorizontalFlip(),\
 	 transforms.ToTensor(), transforms.Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5))])
-	trainDataset = CELEBA(root=opts.root, train=True, transform=transform)
+	trainDataset = OMNI(root=opts.root, train=True, transform=transform)
 	trainLoader = torch.utils.data.DataLoader(trainDataset, batch_size=opts.batchSize, shuffle=True)
 
 	transform = transforms.Compose([ transforms.ToPILImage(), \
 		transforms.ToTensor(), transforms.Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5))])
-	testDataset = CELEBA(root=opts.root, train=False, transform=transform)
+	testDataset = OMNI(root=opts.root, train=False, transform=transform)
 	testLoader = torch.utils.data.DataLoader(testDataset, batch_size=opts.batchSize, shuffle=False)
 	print 'Data loaders ready.'
 
