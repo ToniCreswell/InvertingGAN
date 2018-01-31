@@ -166,6 +166,7 @@ if __name__=='__main__':
 	if opts.data == 'CELEBA':
 		testDataset = CELEBA(root=opts.root, train=False, transform=transform, Ntest=100)  #most models trained with Ntest=1000, but using 100 to prevent memory errors
 	elif opts.data == 'OMNI':
+		print 'using Omniglot eval dataset...'
 		testDataset = OMNI(root=opts.root, train=False, transform=transform)
 	else:
 		testDataset = SHOES(root=opts.root, train=False, transform=transform)
