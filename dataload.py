@@ -201,7 +201,7 @@ class OMNI(data.Dataset): #omniglot
     """
 
 
-    def __init__(self, root, train=True, grain=None, transform=None, Ntest=1000):
+    def __init__(self, root, train=True, grain=None, transform=None):
         
 
         self.root = os.path.expanduser(root)

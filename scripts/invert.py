@@ -1,7 +1,7 @@
 import sys
 sys.path.append('../')
 
-from dataload import CELEBA, SHOES
+from dataload import CELEBA, SHOES, OMNI
 from utils import make_new_folder, plot_norm_losses, save_input_args, \
 sample_z, class_loss_fn, plot_losses, corrupt, prep_data # one_hot
 from models import GEN, DIS
@@ -46,7 +46,7 @@ def get_args():
 	parser.add_argument('--exDir', required=True, type=str)
 	parser.add_argument('--gpuNo', default=0, type=int)
 	parser.add_argument('--alpha', default=1e-6, type=float)
-	parser.add_argument('--data', default='CELEBA', type=str)  #CELEBA or SHOES
+	parser.add_argument('--data', default='CELEBA', type=str)  #CELEBA, SHOES or OMNI
 
 	return parser.parse_args()
 
@@ -163,6 +163,8 @@ if __name__=='__main__':
 		transforms.ToTensor(), transforms.Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5))])
 	if opts.data == 'CELEBA':
 		testDataset = CELEBA(root=opts.root, train=False, transform=transform, Ntest=100)  #most models trained with Ntest=1000, but using 100 to prevent memory errors
+	elif opts.data == 'OMNI':
+		testDataset = CELEBA(root=opts.root, train=False, transform=transform)
 	else:
 		testDataset = SHOES(root=opts.root, train=False, transform=transform)
 	testLoader = torch.utils.data.DataLoader(testDataset, batch_size=opts.batchSize, shuffle=False)
