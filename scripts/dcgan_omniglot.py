@@ -155,8 +155,7 @@ if __name__=='__main__':
 
 	####### Data set #######
 	print 'Prepare data loaders...'
-	transform = transforms.Compose([transforms.RandomHorizontalFlip(),\
-	 transforms.ToTensor(), transforms.Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5))])
+	transform = transforms.Compose([transforms.ToTensor(), transforms.Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5))])
 	trainDataset = OMNI(root=opts.root, train=True, transform=transform)
 	trainLoader = torch.utils.data.DataLoader(trainDataset, batch_size=opts.batchSize, shuffle=True)
 
