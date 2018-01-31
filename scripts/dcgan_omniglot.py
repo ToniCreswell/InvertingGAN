@@ -5,8 +5,8 @@ sys.path.append('../')
 from dataload import OMNI
 from utils import make_new_folder, plot_norm_losses, save_input_args, \
 sample_z, class_loss_fn, plot_losses, corrupt # one_hot
-from models import GEN1 as GEN
-from models import DIS1 as DIS
+from models import GEN1D as GEN
+from models import DIS1D as DIS
 
 
 import torch
