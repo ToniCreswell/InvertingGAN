@@ -252,7 +252,7 @@ class OMNI(data.Dataset): #omniglot
         # doing this so that it is consistent with all other datasets
 
         if self.transform is not None:
-            img = self.transform(img)
+            img = self.transform(np.asarray(img*255, dtype='uint8'))
 
         target = target.astype(int)
 
