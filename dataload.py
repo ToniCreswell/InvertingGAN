@@ -211,13 +211,6 @@ class OMNI(data.Dataset): #omniglot
         self.labels = ['Boots','Sandals', 'Shoes', 'Slippers']
         self.grain = grain
 
-        ####### Shuffel data same way each time #######
-        
-        #shuffel data
-        np.random.seed(1993)
-        rndIdx = np.random.permutation(np.shape(xData)[0])
-        xData = xData[rndIdx]
-        yData = yData[rndIdx]
 
         # now load the picked numpy arrays
         if self.train:
