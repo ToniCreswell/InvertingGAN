@@ -4,7 +4,7 @@ sys.path.append('../')
 from dataload import CELEBA, SHOES, OMNI
 from utils import make_new_folder, plot_norm_losses, save_input_args, \
 sample_z, class_loss_fn, plot_losses, corrupt, prep_data # one_hot
-from models import GEN, DIS
+from models import GEN, DIS, GEN1D, DIS1D
 
 
 import torch
@@ -165,17 +165,18 @@ if __name__=='__main__':
 		transforms.ToTensor(), transforms.Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5))])
 	if opts.data == 'CELEBA':
 		testDataset = CELEBA(root=opts.root, train=False, transform=transform, Ntest=100)  #most models trained with Ntest=1000, but using 100 to prevent memory errors
+		gen = GEN(imSize=IM_SIZE, nz=opts.nz, fSize=opts.fSize)
 	elif opts.data == 'OMNI':
 		print 'using Omniglot eval dataset...'
 		testDataset = OMNI(root=opts.root, train=False, transform=transform)
+		gen = GEN1D(imSize=IM_SIZE, nz=opts.nz, fSize=opts.fSize)
 	else:
 		testDataset = SHOES(root=opts.root, train=False, transform=transform)
+		gen = GEN(imSize=IM_SIZE, nz=opts.nz, fSize=opts.fSize)
 	testLoader = torch.utils.data.DataLoader(testDataset, batch_size=opts.batchSize, shuffle=False)
 	print 'Data loaders ready.'
 
 	###### Create model and load parameters #####
-
-	gen = GEN(imSize=IM_SIZE, nz=opts.nz, fSize=opts.fSize)
 	if gen.useCUDA:
 		torch.cuda.set_device(opts.gpuNo)
 		gen.cuda()
