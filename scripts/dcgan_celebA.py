@@ -48,11 +48,12 @@ def get_args():
 	parser.add_argument('--gpuNo', default=0, type=int)
 	parser.add_argument('--useNoise', action='store_true')
 	parser.add_argument('--pi', default=0.5, type=float)
+	parser.add_argument('--WGAN', action='store_true')
 
 	return parser.parse_args()
 
 
-def train_mode(gen, dis, useNoise=False, beta1=0.5):
+def train_mode(gen, dis, useNoise=False, beta1=0.5, WGAN=False):
 	####### Define optimizer #######
 	genOptimizer = optim.Adam(gen.parameters(), lr=opts.lr, betas=(beta1, 0.999))
 	disOptimizer = optim.Adam(dis.parameters(), lr=opts.lr, betas=(beta1, 0.999))
@@ -104,7 +105,10 @@ def train_mode(gen, dis, useNoise=False, beta1=0.5):
 			real = dis.ones(xReal.size(0))
 			fake = dis.zeros(xFake.size(0))
 
-			disLoss = opts.pi * F.binary_cross_entropy(pReal_D, real) + \
+			if WGAN:
+				disLoss = pFake_D.mean() - pReal_D.mean()
+			else:
+				disLoss = opts.pi * F.binary_cross_entropy(pReal_D, real) + \
 						(1 - opts.pi) * F.binary_cross_entropy(pFake_D, fake)
 
 			####### Calculate generator loss #######
@@ -112,7 +116,11 @@ def train_mode(gen, dis, useNoise=False, beta1=0.5):
 			if useNoise:
 				xFake_ = corrupt(xFake_, noiseLevel) #add a little noise
 			pFake_G = dis.forward(xFake_)
-			genLoss = F.binary_cross_entropy(pFake_G, real)
+			
+			if WGAN:
+				genLoss = - pFake_G.mean()
+			else:
+				genLoss = F.binary_cross_entropy(pFake_G, real)
 
 			####### Do DIS updates #######
 			disOptimizer.zero_grad()
@@ -170,7 +178,7 @@ if __name__=='__main__':
 	IM_SIZE = 64
 
 	gen = GEN(imSize=IM_SIZE, nz=opts.nz, fSize=opts.fSize)
-	dis = DIS(imSize=IM_SIZE, fSize=opts.fSize)
+	dis = DIS(imSize=IM_SIZE, fSize=opts.fSize, WGAN=opts.WGAN)
 
-	gen, dis = train_mode(gen, dis, useNoise=opts.useNoise, beta1=0.5)
+	gen, dis = train_mode(gen, dis, useNoise=opts.useNoise, beta1=0.5, WGAN=opts.WGAN)
 
