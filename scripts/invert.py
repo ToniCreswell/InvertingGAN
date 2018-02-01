@@ -99,7 +99,7 @@ def find_batch_z(gen, x, nz, lr, exDir, maxEpochs=100, alpha=1e-6, batchNo=0):
 	gen.eval()
 
 	#save the "original" images
-	save_image(x.data, join(exDir, 'original.png'), normalize=True)
+	save_image(x.data, join(exDir, 'original'+str(batchNo)+.png'), normalize=True)
 
 	#Assume the prior is Standard Normal
 	pdf = torch.distributions.Normal(0, 1)
