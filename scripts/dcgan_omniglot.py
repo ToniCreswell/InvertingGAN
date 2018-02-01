@@ -172,8 +172,6 @@ if __name__=='__main__':
 	print 'Data loaders ready.'
 
 	###### Create model #####
-	IM_SIZE = 64
-
 	gen = GEN(imSize=IM_SIZE, nz=opts.nz, fSize=opts.fSize)
 	dis = DIS(imSize=IM_SIZE, fSize=opts.fSize)
 
