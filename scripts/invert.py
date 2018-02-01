@@ -57,7 +57,7 @@ def find_z(gen, x, nz, lr, exDir, maxEpochs=100):
 	gen.eval()
 
 	#save the "original" images
-	save_image(x.data, join(exDir, 'original.png'))
+	save_image(x.data, join(exDir, 'original.png'), normalize=True)
 
 	if gen.useCUDA:
 		gen.cuda()
