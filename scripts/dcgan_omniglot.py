@@ -120,7 +120,7 @@ def train_mode(gen, dis, useNoise=False, beta1=0.5, WGAN=False):
 			pFake_G = dis.forward(xFake_)
 
 			if WGAN:
-				genLoss = - pFakeD.mean()
+				genLoss = - pFake_G.mean()
 			else:
 				genLoss = F.binary_cross_entropy(pFake_G, real)
 
