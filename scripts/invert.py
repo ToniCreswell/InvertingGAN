@@ -92,7 +92,7 @@ def find_z(gen, x, nz, lr, exDir, maxEpochs=100):
 	return Zinit
 
 
-def find_batch_z(gen, x, nz, lr, exDir, maxEpochs=100, alpha=1e-6):
+def find_batch_z(gen, x, nz, lr, exDir, maxEpochs=100, alpha=1e-6, batchNo=0):
 
 	#generator in eval mode
 	gen.eval()
@@ -132,7 +132,7 @@ def find_batch_z(gen, x, nz, lr, exDir, maxEpochs=100, alpha=1e-6):
 
 		if e%100==0:
 			print '[%d] loss: %0.5f, recLoss: %0.5f, regMean: %0.5f' % (e, loss.data[0], recLoss.data[0], logProb.mean().data[0])
-			save_image(xHAT.data, join(exDir, 'rec'+str(e)+'.png'), normalize=True)
+			# save_image(xHAT.data, join(exDir, 'rec'+str(e)+'.png'), normalize=True)
 
 		#plot training losses
 		if e>0:
@@ -141,9 +141,9 @@ def find_batch_z(gen, x, nz, lr, exDir, maxEpochs=100, alpha=1e-6):
 
 	#visualise the final output
 	xHAT = gen.forward(Zinit)
-	save_image(xHAT.data, join(exDir, 'rec.png'), normalize=True)
+	save_image(xHAT.data, join(exDir, 'rec'+str(batchNo)+'.png'), normalize=True)
 
-	return Zinit
+	return Zinit, recLoss.data[0]
 
 
 if __name__=='__main__':
@@ -187,11 +187,18 @@ if __name__=='__main__':
 
 
 	#Find each z individually for each x
+	meanLoss = 0
 	for i, data in enumerate(testLoader):
 		x, y = prep_data(data, useCUDA=gen.useCUDA)
-		z = find_batch_z(gen=gen, x=x, nz=opts.nz, lr=opts.lr, exDir=exDir, maxEpochs=opts.maxEpochs, alpha=opts.alpha)
+		z, recLoss = find_batch_z(gen=gen, x=x, nz=opts.nz, lr=opts.lr, exDir=exDir, maxEpochs=opts.maxEpochs, alpha=opts.alpha, batchNo=i)
 
+		sumLoss += recLoss*z.size(0)
 		break
+	
+	meanLoss = sumLoss / testDataset.size(0)
+	f = open(join(exDir,'recError.txt'), 'w')
+	f.write('mean loss %0.5f', % (meanLoss))
+
 
 
 
