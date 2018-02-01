@@ -178,6 +178,8 @@ if __name__=='__main__':
 	testLoader = torch.utils.data.DataLoader(testDataset, batch_size=opts.batchSize, shuffle=False)
 	print 'Data loaders ready.'
 
+	print "Test Data:", len(testDataset)
+
 	###### Create model and load parameters #####
 	if gen.useCUDA:
 		torch.cuda.set_device(opts.gpuNo)
