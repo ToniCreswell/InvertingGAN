@@ -195,7 +195,7 @@ if __name__=='__main__':
 		sumLoss += recLoss*z.size(0)
 		break
 	
-	meanLoss = sumLoss / testDataset.size(0)
+	meanLoss = sumLoss / len(testDataset)
 	f = open(join(exDir,'recError.txt'), 'w')
 	f.write('mean loss %0.5f' % (meanLoss))
 	f.close()
