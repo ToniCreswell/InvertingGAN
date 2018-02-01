@@ -187,7 +187,7 @@ if __name__=='__main__':
 
 
 	#Find each z individually for each x
-	meanLoss = 0
+	sumLoss = 0
 	for i, data in enumerate(testLoader):
 		x, y = prep_data(data, useCUDA=gen.useCUDA)
 		z, recLoss = find_batch_z(gen=gen, x=x, nz=opts.nz, lr=opts.lr, exDir=exDir, maxEpochs=opts.maxEpochs, alpha=opts.alpha, batchNo=i)
