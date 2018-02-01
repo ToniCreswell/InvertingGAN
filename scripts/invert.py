@@ -47,6 +47,7 @@ def get_args():
 	parser.add_argument('--gpuNo', default=0, type=int)
 	parser.add_argument('--alpha', default=1e-6, type=float)
 	parser.add_argument('--data', default='CELEBA', type=str)  #CELEBA, SHOES or OMNI
+	parser.add_argument('--oneBatch', 'store_action'=True) #to process just one bach
 
 	return parser.parse_args()
 
@@ -195,7 +196,12 @@ if __name__=='__main__':
 		z, recLoss = find_batch_z(gen=gen, x=x, nz=opts.nz, lr=opts.lr, exDir=exDir, maxEpochs=opts.maxEpochs, alpha=opts.alpha, batchNo=i)
 
 		sumLoss += recLoss*z.size(0)
-		break
+
+		if opes.oneBatch:
+			f = open(join(exDir,'recError.txt'), 'w')
+			f.write('mean loss %0.5f' % (sumLoss/z.size(0)))
+			f.close()
+
 	
 	meanLoss = sumLoss / len(testDataset)
 	f = open(join(exDir,'recError.txt'), 'w')
