@@ -199,7 +199,7 @@ if __name__=='__main__':
 
 		if opts.oneBatch:
 			f = open(join(exDir,'recError.txt'), 'w')
-			f.write('mean loss %0.5f' % (sumLoss/z.size(0)))
+			f.write('mean loss (one batch of size %d) %0.5f' % (opts.batchSize, sumLoss/z.size(0)))
 			f.close()
 
 			exit()
