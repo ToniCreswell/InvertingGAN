@@ -47,7 +47,7 @@ def get_args():
 	parser.add_argument('--gpuNo', default=0, type=int)
 	parser.add_argument('--alpha', default=1e-6, type=float)
 	parser.add_argument('--data', default='CELEBA', type=str)  #CELEBA, SHOES or OMNI
-	parser.add_argument('--oneBatch', 'store_action'=True) #to process just one bach
+	parser.add_argument('--oneBatch', action='store_true') #to process just one bach
 
 	return parser.parse_args()
 
