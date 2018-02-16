@@ -17,4 +17,4 @@ OR
 
 ## Example results:
 
-![alt text](https://github.com/ToniCreswell/attribute-cVAEGAN/blob/master/imgs/shoes.png)
+![alt text](https://github.com/ToniCreswell/InvertingGAN/blob/master/imgs/shoes.png)
