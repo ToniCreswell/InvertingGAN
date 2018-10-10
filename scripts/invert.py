@@ -209,7 +209,7 @@ if __name__=='__main__':
 	mseLoss = np.mean((allRec - allX)**2, axis=(1,2,3))  # mean over colour channels and pixels
 	np.save(join(exDir, 'mseLosses_per_sample.npy'), mseLoss)
 	meanLoss = np.mean(mseLoss) # mean over samples
-	stdLoss = np.ztd(mseLoss)  #std over samples
+	stdLoss = np.std(mseLoss)  #std over samples
 
 	f = open(join(exDir,'recError.txt'), 'w')
 	f.write('mean loss %0.5f' % (meanLoss))
