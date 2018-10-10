@@ -144,7 +144,7 @@ def find_batch_z(gen, x, nz, lr, exDir, maxEpochs=100, alpha=1e-6, batchNo=0):
 	xHAT = gen.forward(Zinit)
 	save_image(xHAT.data, join(exDir, 'rec_batch'+str(batchNo)+'.png'), normalize=True)
 
-	return Zinit, recLoss.data[0]
+	return Zinit, recLoss.data[0], xHat
 
 
 if __name__=='__main__':
@@ -190,24 +190,32 @@ if __name__=='__main__':
 
 
 	#Find each z individually for each x
+	allRec = []
+	allX = []
 	sumLoss = 0
 	for i, data in enumerate(testLoader):
 		x, y = prep_data(data, useCUDA=gen.useCUDA)
-		z, recLoss = find_batch_z(gen=gen, x=x, nz=opts.nz, lr=opts.lr, exDir=exDir, maxEpochs=opts.maxEpochs, alpha=opts.alpha, batchNo=i)
+		z, recLoss, xRec = find_batch_z(gen=gen, x=x, nz=opts.nz, lr=opts.lr, exDir=exDir, maxEpochs=opts.maxEpochs, alpha=opts.alpha, batchNo=i)
 
-		sumLoss += recLoss*z.size(0)
+		allRec.append(xRec.data)
+		allX.append(x.data) #incase the loader shuffles samples
 
-		if opts.oneBatch:
-			f = open(join(exDir,'recError.txt'), 'w')
-			f.write('mean loss (one batch of size %d) %0.5f' % (opts.batchSize, sumLoss/z.size(0)))
-			f.close()
+	print('allRec:', allRec)
+	print('allX:', allX)
+	allRec = np.concatenate(allRec)
+	allX = np.concatenate(allX)
+	print('allRec:', allRec)
+	print('allX:', allX)
 
-			exit()
 
-	
-	meanLoss = sumLoss / len(testDataset)
+	mseLoss = np.mean((allRec - allA)**2, axis=(1,2,3))  # mean over colour channels and pixels
+	np.save(join(exDir, 'mseLosses_per_sample.npy'), mseLoss)
+	meanLoss = np.mean(mseLoss) # mean over samples
+	stdLoss = np.ztd(mseLoss)  #std over samples
+
 	f = open(join(exDir,'recError.txt'), 'w')
 	f.write('mean loss %0.5f' % (meanLoss))
+	f.write('std of loss %0.5f' % (stdLoss))
 	f.close()
 
 
