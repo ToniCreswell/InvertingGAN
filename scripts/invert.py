@@ -151,7 +151,7 @@ if __name__=='__main__':
 	opts = get_args()
 
 	#Create new subfolder for saving results and training params
-	exDir = join(opts.exDir, 'inversionExperiments2')
+	exDir = join(opts.exDir, 'inversionExperiments_wSTD')
 	try:
 		os.mkdir(exDir)
 	except:
