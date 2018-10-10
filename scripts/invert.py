@@ -200,15 +200,13 @@ if __name__=='__main__':
 		allRec.append(xRec.data)
 		allX.append(x.data) #incase the loader shuffles samples
 
-	print('allRec:', allRec)
-	print('allX:', allX)
 	allRec = np.concatenate(allRec)
 	allX = np.concatenate(allX)
-	print('allRec:', allRec)
-	print('allX:', allX)
+	print('allRec:', np.shape(allRec))
+	print('allX:', np.shape(allX))
 
 
-	mseLoss = np.mean((allRec - allA)**2, axis=(1,2,3))  # mean over colour channels and pixels
+	mseLoss = np.mean((allRec - allX)**2, axis=(1,2,3))  # mean over colour channels and pixels
 	np.save(join(exDir, 'mseLosses_per_sample.npy'), mseLoss)
 	meanLoss = np.mean(mseLoss) # mean over samples
 	stdLoss = np.ztd(mseLoss)  #std over samples
@@ -216,6 +214,7 @@ if __name__=='__main__':
 	f = open(join(exDir,'recError.txt'), 'w')
 	f.write('mean loss %0.5f' % (meanLoss))
 	f.write('std of loss %0.5f' % (stdLoss))
+	f.write('Test Data %d' % len(testDataset))
 	f.close()
 
 
