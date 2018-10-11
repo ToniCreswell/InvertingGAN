@@ -201,7 +201,7 @@ if __name__=='__main__':
 		allX.append(x.data) #incase the loader shuffles samples
 
 		if opts.oneBatch:
-			mseLoss = np.mean((xRec.data - x.data)**2, axis=(1,2,3))  # mean over colour channels and pixels
+			mseLoss = np.mean((xRec.data[0] - x.data[0])**2, axis=(1,2,3))  # mean over colour channels and pixels
 			np.save(join(exDir, 'one_batch_mseLosses_per_sample.npy'), mseLoss)
 			meanLoss = np.mean(mseLoss) # mean over samples
 			stdLoss = np.std(mseLoss)  #std over samples
