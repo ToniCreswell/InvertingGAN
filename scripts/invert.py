@@ -210,7 +210,7 @@ if __name__=='__main__':
 			# f = open(join(exDir,'one_batch_recError.txt'), 'w')
 			# f.write('mean loss (one batch) %0.5f' % (meanLoss))
 			# f.write('std of loss(one batch) %0.5f' % (stdLoss))
-			# f.write('Test Data (one batch) %d' % np.shape(mseLoss.data)[0])
+			# f.write('Test Data (one batch) %d' % np.shape(mseLoss))
 			# f.close()
 
 			print(np.shape(np.asarray(xRec.data)))
