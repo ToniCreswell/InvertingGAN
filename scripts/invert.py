@@ -215,6 +215,7 @@ if __name__=='__main__':
 
 			print(np.shape(np.asarray(xRec.data)))
 			print(np.shape(np.asarray(x.data)))
+			print(np.shape(np.asarray(mseLoss)))
 
 			exit()
 
