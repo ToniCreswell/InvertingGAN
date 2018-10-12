@@ -203,15 +203,18 @@ if __name__=='__main__':
 		if opts.oneBatch:
 			diff = np.asarray((xRec.data - x.data)**2)
 			mseLoss = np.mean(diff, axis=(1,2,3))  # mean over colour channels and pixels
-			np.save(join(exDir, 'one_batch_mseLosses_per_sample.npy'), mseLoss)
+			# np.save(join(exDir, 'one_batch_mseLosses_per_sample.npy'), mseLoss)
 			meanLoss = np.mean(mseLoss) # mean over samples
 			stdLoss = np.std(mseLoss)  #std over samples
 
-			f = open(join(exDir,'one_batch_recError.txt'), 'w')
-			f.write('mean loss (one batch) %0.5f' % (meanLoss))
-			f.write('std of loss(one batch) %0.5f' % (stdLoss))
-			f.write('Test Data (one batch) %d' % np.shape(mseLoss.data)[0])
-			f.close()
+			# f = open(join(exDir,'one_batch_recError.txt'), 'w')
+			# f.write('mean loss (one batch) %0.5f' % (meanLoss))
+			# f.write('std of loss(one batch) %0.5f' % (stdLoss))
+			# f.write('Test Data (one batch) %d' % np.shape(mseLoss.data)[0])
+			# f.close()
+
+			print(np.shape(np.asarray(xRec.data)))
+			print(np.shape(np.asarray(x.data)))
 
 			exit()
 
