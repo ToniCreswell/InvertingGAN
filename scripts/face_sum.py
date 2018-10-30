@@ -30,7 +30,7 @@ if __name__=='__main__':
 	transform = transforms.Compose(
 		[transforms.ToPILImage(),transforms.ToTensor(),transforms.Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5))])
 
-	testDataset = CELEBA(root=opts.root, train=False, labels=['Male', 'Eyeglasses'] transform=transform, Ntest=1000)  #most models trained with Ntest=1000, but using 100 to prevent memory errors
+	testDataset = CELEBA(root=opts.root, train=False, labels=['Male', 'Eyeglasses'], transform=transform, Ntest=1000)  #most models trained with Ntest=1000, but using 100 to prevent memory errors
 	gen = GEN(imSize=IM_SIZE, nz=opts.nz, fSize=opts.fSize)
 
 	# Load model
