@@ -56,6 +56,27 @@ if __name__=='__main__':
 	testLoader = torch.utils.data.DataLoader(testDataset, batch_size=opts.batchSize, shuffle=False)
 	print 'Data loader ready.'
 
+	# Get the data:
+	data = iter(testLoader).next()
+	x, y = prep_data(data, useCUDA=False)#gen.useCUDA)
+	
+	# Get men with glasses
+	idx_men_w_glasses = np.argwhere(torch.prod(y.data==torch.Tensor([1,1]), dim=1))[0]
+	img_men_w_glasses = x[idx_men_w_glasses[:10]]
+	save_image(img_men_w_glasses.data+0.5, join(exDir,'img_men_w_glasses_original.png'))
+
+
+	# Get men without glasses
+	idx_men_wout_glasses = np.argwhere(torch.prod(y.data==torch.Tensor([1,0]), dim=1))[0]
+	img_men_wout_glasses = x[idx_men_wout_glasses[:10]]
+	save_image(img_men_wout_glasses.data+0.5, join(exDir,'img_men_wout_glasses_original.png'))
+
+
+	# Get womean without glasses
+	idx_women_wout_glasses = np.argwhere(torch.prod(y.data==torch.Tensor([0,0]), dim=1))[0]
+	img_women_wout_glasses = x[idx_women_wout_glasses[:10]]
+	save_image(img_women_wout_glasses.data+0.5, join(exDir,'img_women_wout_glasses_original.png'))
+
 	# # Load model
 	# gen = GEN(imSize=IM_SIZE, nz=opts.nz, fSize=opts.fSize)
 	# if gen.useCUDA:
@@ -65,13 +86,5 @@ if __name__=='__main__':
 	# print 'params loaded'
 
 
-	# Get men with glasses
-	data = testLoader.next()
-	x, y = prep_data(data, useCUDA=gen.useCUDA)
-	print(np.shape(x.data()), np.shape(y.data()))
 
 
-	# Get men without glasses
-
-
-	# Get womean without glasses
