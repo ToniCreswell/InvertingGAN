@@ -6,6 +6,16 @@ from dataload import CELEBA_ALL_LABELS as CELEBA
 from utils import make_new_folder, plot_norm_losses, save_input_args, \
 sample_z, class_loss_fn, plot_losses, corrupt, prep_data
 
+import torch
+from torch import optim
+from torch import nn
+from torch.autograd import Variable
+import torch.nn.functional as F
+from torch.nn.functional import binary_cross_entropy as bce
+
+from torchvision import transforms
+from torchvision.utils import make_grid, save_image
+
 from invert import find_z, get_args
 
 import os
