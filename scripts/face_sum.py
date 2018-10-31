@@ -90,7 +90,22 @@ if __name__=='__main__':
 	x_in = torch.cat([img_men_w_glasses, img_men_wout_glasses, img_women_wout_glasses], dim=0)
 	print(np.shape(x_in))
 
-	z_out = find_z(gen, x_in, nz=opts.nz, lr=opts.lr, exDir=exDir, maxEpochs=opts.maxEpochs)
+	try:
+		z_men_w_glasses = np.load(join(exDir, 'z_men_w_glasses.npy'))
+		z_men_wout_glasses = np.load(join(exDir, 'z_men_wout_glasses.npy'))
+		z_women_wout_glasses = np.load(join(exDir, 'z_women_wout_glasses.npy'))
+	except:
+		z_out = find_z(gen, x_in, nz=opts.nz, lr=opts.lr, exDir=exDir, maxEpochs=opts.maxEpochs)
+
+		z_men_w_glasses = z_out[:10]
+		z_men_wout_glasses = z_out[10:20]
+		z_women_wout_glasses = z_out[10:]
+
+		np.save(join(exDir, 'z_men_w_glasses.npy'), z_men_w_glasses)
+		np.save(join(exDir, 'z_men_wout_glasses.npy'), z_men_wout_glasses)
+		np.save(join(exDir, 'z_women_wout_glasses.npy'), z_women_wout_glasses)
+
+	
 
 
 
