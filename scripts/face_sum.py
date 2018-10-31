@@ -74,19 +74,19 @@ if __name__=='__main__':
 	# Get men with glasses
 	idx_men_w_glasses = np.argwhere(torch.prod(y.data==torch.Tensor([1,1]).cuda(), dim=1))[0]
 	img_men_w_glasses = x[idx_men_w_glasses[:opts.numSamples]]
-	save_image(img_men_w_glasses.data, join(exDir,'img_'+opts.labels[0]+'_w_'+opts.labels[1]+'_original.png'), nrow=opts.numSamples, normalize=True)
+	save_image(img_men_w_glasses.data, join(exDir,'img_'+opts.labels[0]+'_w_'+opts.labels[1]+'_original.png'), nrow=10, normalize=True)
 
 
 	# Get men without glasses
 	idx_men_wout_glasses = np.argwhere(torch.prod(y.data==torch.Tensor([1,0]).cuda(), dim=1))[0]
 	img_men_wout_glasses = x[idx_men_wout_glasses[:opts.numSamples]]
-	save_image(img_men_wout_glasses.data, join(exDir,'img_'+opts.labels[0]+'_wout_'+opts.labels[1]+'original.png'), nrow=opts.numSamples, normalize=True)
+	save_image(img_men_wout_glasses.data, join(exDir,'img_'+opts.labels[0]+'_wout_'+opts.labels[1]+'_original.png'), nrow=10, normalize=True)
 
 
 	# Get womean without glasses
 	idx_women_wout_glasses = np.argwhere(torch.prod(y.data==torch.Tensor([0,0]).cuda(), dim=1))[0]
 	img_women_wout_glasses = x[idx_women_wout_glasses[:opts.numSamples]]
-	save_image(img_women_wout_glasses.data, join(exDir,'img_not_'+opts.labels[0]+'_wout_'+opts.labels[1]+'original.png'), nrow=opts.numSamples, normalize=True)
+	save_image(img_women_wout_glasses.data, join(exDir,'img_not_'+opts.labels[0]+'_wout_'+opts.labels[1]+'_original.png'), nrow=10, normalize=True)
 
 	# Put in one batch to make inversion faster:
 	x_in = torch.cat([img_men_w_glasses, img_men_wout_glasses, img_women_wout_glasses], dim=0)
@@ -113,7 +113,7 @@ if __name__=='__main__':
 	# face sum NOT on means
 	z_woman_w_glasses = z_men_w_glasses - z_men_wout_glasses + z_women_wout_glasses
 	img_woman_w_glasses = gen.forward(z_woman_w_glasses)
-	save_image(img_woman_w_glasses, join(exDir,'img_not_'+opts.labels[0]+'_w_'+opts.labels[1]+'.png'), nrow=opts.numSamples, normalize=True)
+	save_image(img_woman_w_glasses, join(exDir,'img_not_'+opts.labels[0]+'_w_'+opts.labels[1]+'.png'), nrow=10, normalize=True)
 
 	# face sum ON means
 	z_mean_man_w_glasses = torch.mean(z_men_w_glasses, dim=0, keepdim=True)
@@ -136,6 +136,6 @@ if __name__=='__main__':
 	# Womean + the mean vector:
 	z_women_w_mean_glasses = z_mean_man_w_glasses - z_mean_man_wout_glasses + z_women_wout_glasses
 	img_women_w_mean_glasses = gen.forward(z_women_w_mean_glasses)
-	save_image(img_women_w_mean_glasses, join(exDir,'img_mean_not_'+opts.labels[0]+'_w_mean_'+opts.labels[1]+'.png'), nrow=10, normalize=True)
+	save_image(img_women_w_mean_glasses, join(exDir,'img_not_'+opts.labels[0]+'_w_mean_'+opts.labels[1]+'.png'), nrow=10, normalize=True)
 
 
