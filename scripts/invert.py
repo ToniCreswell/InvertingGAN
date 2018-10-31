@@ -91,7 +91,7 @@ def find_z(gen, x, nz, lr, exDir, maxEpochs=100):
 	#visualise the final output
 	xHAT = gen.forward(Zinit)
 	prtin('xHAT.data min and max:', np.min(xHAT.data), np.max(xHAT.data))
-	save_image(xHAT.data+0.5, join(exDir, 'rec.png'))
+	save_image(xHAT.data, join(exDir, 'rec.png'), normalize=True)
 
 	return Zinit
 
