@@ -57,6 +57,14 @@ if __name__=='__main__':
 	testLoader = torch.utils.data.DataLoader(testDataset, batch_size=opts.batchSize, shuffle=False)
 	print 'Data loader ready.'
 
+	#Load model
+	gen = GEN(imSize=IM_SIZE, nz=opts.nz, fSize=opts.fSize)
+	if gen.useCUDA:
+		torch.cuda.set_device(opts.gpuNo)
+		gen.cuda()
+	gen.load_params(opts.exDir, gpuNo=opts.gpuNo)
+	print 'params loaded'
+
 	# Get the data:
 	data = iter(testLoader).next()
 	x, y = prep_data(data, useCUDA=gen.useCUDA)
@@ -81,14 +89,6 @@ if __name__=='__main__':
 	# Put in one batch to make inversion faster:
 	x_in = torch.cat([img_men_w_glasses, img_men_wout_glasses, img_women_wout_glasses], dim=0)
 	print(np.shape(x_in))
-	
-	# Load model
-	gen = GEN(imSize=IM_SIZE, nz=opts.nz, fSize=opts.fSize)
-	if gen.useCUDA:
-		torch.cuda.set_device(opts.gpuNo)
-		gen.cuda()
-	gen.load_params(opts.exDir, gpuNo=opts.gpuNo)
-	print 'params loaded'
 
 	z_out = find_z(gen, x_in, nz=opts.nz, lr=opts.lr, exDir=exDir, maxEpochs=opts.maxEpochs)
 
