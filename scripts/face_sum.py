@@ -112,7 +112,8 @@ if __name__=='__main__':
 		np.save(join(exDir, 'z_'+opts.labels[0]+'_w_'+opts.labels[1]+'.npy'), z_men_w_glasses.detach().cpu().numpy())
 		np.save(join(exDir, 'z_'+opts.labels[0]+'_wout_'+opts.labels[1]+'.npy'), z_men_wout_glasses.detach().cpu().numpy())
 		np.save(join(exDir, 'z_not_'+opts.labels[0]+'_wout_'+opts.labels[1]+'.npy'), z_women_wout_glasses.detach().cpu().numpy())
-
+		print(np.shape(z_out).data)
+		
 	# Save reconstructed images
 	save_image(gen.forward(z_men_w_glasses).data, join(exDir,'img_'+opts.labels[0]+'_w_'+opts.labels[1]+'_rec.png'), nrow=10, normalize=True)
 	save_image(gen.forward(z_men_wout_glasses).data, join(exDir,'img_'+opts.labels[0]+'_wout_'+opts.labels[1]+'_rec.png'), nrow=10, normalize=True)
