@@ -92,8 +92,11 @@ if __name__=='__main__':
 
 	try:
 		z_men_w_glasses = np.load(join(exDir, 'z_men_w_glasses.npy'))
+		z_men_w_glasses = torch.Tensor(z_men_w_glasses).cuda()
 		z_men_wout_glasses = np.load(join(exDir, 'z_men_wout_glasses.npy'))
+		z_men_wout_glasses = torch.Tensor(z_men_wout_glasses).cuda()
 		z_women_wout_glasses = np.load(join(exDir, 'z_women_wout_glasses.npy'))
+		z_women_wout_glasses = torch.Tensor(z_women_wout_glasses).cuda()
 	except:
 		z_out = find_z(gen, x_in, nz=opts.nz, lr=opts.lr, exDir=exDir, maxEpochs=opts.maxEpochs)
 
@@ -101,11 +104,20 @@ if __name__=='__main__':
 		z_men_wout_glasses = z_out[10:20]
 		z_women_wout_glasses = z_out[10:]
 
-		np.save(join(exDir, 'z_men_w_glasses.npy'), z_men_w_glasses)
-		np.save(join(exDir, 'z_men_wout_glasses.npy'), z_men_wout_glasses)
-		np.save(join(exDir, 'z_women_wout_glasses.npy'), z_women_wout_glasses)
+		np.save(join(exDir, 'z_men_w_glasses.npy'), z_men_w_glasses.detach().numpy())
+		np.save(join(exDir, 'z_men_wout_glasses.npy'), z_men_wout_glasses.detach().numpy())
+		np.save(join(exDir, 'z_women_wout_glasses.npy'), z_women_wout_glasses.detach().numpy())
 
-	
+	z_mean_man_w_glasses = torch.mean(z_men_w_glasses, dim=0, keepdim=True)
+	z_mean_man_wout_glasses = torch.mean(z_men_wout_glasses, dim=0, keepdim=True)
+	z_mean_woman_wout_glasses = torch.mean(z_women_wout_glasses, dim=0, keepdim=True)
+
+	img_mean_man_w_glasses = gen.forward(z_mean_man_w_glasses)
+	img_mean_man_wout_glasses = gen.forward(z_mean_man_wout_glasses)
+	img_an_woman_wout_glasses = gen.forward(z_mean_woman_wout_glasses)
+
+
+
 
 
 
