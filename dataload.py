@@ -88,6 +88,7 @@ class CELEBA(data.Dataset):
         assert os.path.isdir(inDir)
         assert os.path.exists(join(inDir, 'xTrain.npy'))
         assert os.path.exists(join(inDir, 'yAllTrain.npy'))
+        
 
 class CELEBA_ALL_LABELS(data.Dataset):
     """
