@@ -114,7 +114,13 @@ if __name__=='__main__':
 
 	img_mean_man_w_glasses = gen.forward(z_mean_man_w_glasses)
 	img_mean_man_wout_glasses = gen.forward(z_mean_man_wout_glasses)
-	img_an_woman_wout_glasses = gen.forward(z_mean_woman_wout_glasses)
+	img_mean_woman_wout_glasses = gen.forward(z_mean_woman_wout_glasses)
+
+	save_image(img_mean_man_w_glasses, join(exDir,'img_mean_man_w_glasses.png', nrow=1, normalize=True))
+	save_image(img_mean_man_wout_glasses, join(exDir,'img_mean_man_wout_glasses.png', nrow=1, normalize=True))
+	save_image(img_mean_woman_wout_glasses, join(exDir,'img_mean_woman_wout_glasses.png', nrow=1, normalize=True))
+
+
 
 
 
