@@ -34,6 +34,7 @@ if __name__=='__main__':
 	opts = get_args()
 	opts.data = 'CELEBA'
 	opts.imSize = 64
+	# opts.batchSize = 100
 
 	#Create new subfolder for saving results and training params
 	exDir = join(opts.exDir, 'face_sum_experiments')
@@ -65,6 +66,9 @@ if __name__=='__main__':
 
 
 	# Get men with glasses
+	data = testLoader.next()
+	x, y = prep_data(data, useCUDA=gen.useCUDA)
+	print(np.shape(x.data()), np.shape(y.data()))
 
 
 	# Get men without glasses
