@@ -113,8 +113,8 @@ if __name__=='__main__':
 	# Save reconstructed images
 		save_image(gen.forward(z_men_w_glasses).data, join(exDir,'img_'+opts.labels[0]+'_w_'+opts.labels[1]+'_rec.png'), nrow=10, normalize=True)
 		save_image(gen.forward(z_men_wout_glasses).data, join(exDir,'img_'+opts.labels[0]+'_wout_'+opts.labels[1]+'_rec.png'), nrow=10, normalize=True)
-		save_image(gen.forward(z_women_wout_glasses).data, join(exDir,'img_not_'+opts.labels[0]+'_wout_'+opts.labels[1]+'_original.png'), nrow=10, normalize=True)
-		
+		save_image(gen.forward(z_women_wout_glasses).data, join(exDir,'img_not_'+opts.labels[0]+'_wout_'+opts.labels[1]+'_rec.png'), nrow=10, normalize=True)
+
 	# face sum NOT on means
 	z_woman_w_glasses = z_men_w_glasses - z_men_wout_glasses + z_women_wout_glasses
 	img_woman_w_glasses = gen.forward(z_woman_w_glasses)
