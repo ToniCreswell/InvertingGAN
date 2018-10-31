@@ -2,6 +2,7 @@ import sys
 sys.path.append('../')
 
 from dataload import CELEBA_ALL_LABELS as CELEBA
+from models import GEN
 
 from utils import make_new_folder, plot_norm_losses, save_input_args, \
 sample_z, class_loss_fn, plot_losses, corrupt, prep_data
