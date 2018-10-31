@@ -83,10 +83,10 @@ def prep_data(data, useCUDA):
 	x, y = data
 	if useCUDA:
 		x = Variable(x.cuda())
-		y = Variable(y.cuda()).view(y.size(0),1).type_as(x)
+		y = Variable(y.cuda()).view(y.size(0),-1).type_as(x)
 	else:
 		x = Variable(x)
-		y = Variable(y).view(y.size(0),1).type_as(x)
+		y = Variable(y).view(y.size(0),-1).type_as(x)
 	return x,y
 
 def corrupt(x, level=0.003):  #assumes use of cuda (for speed)
