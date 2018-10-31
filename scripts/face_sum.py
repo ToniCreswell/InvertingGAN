@@ -70,19 +70,19 @@ if __name__=='__main__':
 	x, y = prep_data(data, useCUDA=gen.useCUDA)
 	
 	# Get men with glasses
-	idx_men_w_glasses = np.argwhere(torch.prod(y.data==torch.Tensor([1,1]), dim=1))[0]
+	idx_men_w_glasses = np.argwhere(torch.prod(y.data==torch.Tensor([1,1]).cuda(), dim=1))[0]
 	img_men_w_glasses = x[idx_men_w_glasses[:10]]
 	save_image(img_men_w_glasses.data+0.5, join(exDir,'img_men_w_glasses_original.png'), nrow=10)
 
 
 	# Get men without glasses
-	idx_men_wout_glasses = np.argwhere(torch.prod(y.data==torch.Tensor([1,0]), dim=1))[0]
+	idx_men_wout_glasses = np.argwhere(torch.prod(y.data==torch.Tensor([1,0]).cuda(), dim=1))[0]
 	img_men_wout_glasses = x[idx_men_wout_glasses[:10]]
 	save_image(img_men_wout_glasses.data+0.5, join(exDir,'img_men_wout_glasses_original.png'), nrow=10)
 
 
 	# Get womean without glasses
-	idx_women_wout_glasses = np.argwhere(torch.prod(y.data==torch.Tensor([0,0]), dim=1))[0]
+	idx_women_wout_glasses = np.argwhere(torch.prod(y.data==torch.Tensor([0,0]).cuda(), dim=1))[0]
 	img_women_wout_glasses = x[idx_women_wout_glasses[:10]]
 	save_image(img_women_wout_glasses.data+0.5, join(exDir,'img_women_wout_glasses_original.png'), nrow=10)
 
