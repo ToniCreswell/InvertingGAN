@@ -60,6 +60,8 @@ def find_z(gen, x, nz, lr, exDir, maxEpochs=100):
 	#save the "original" images
 	save_image(x.data, join(exDir, 'original.png'), normalize=True)
 
+	print('x.data min and max:', np.min(x.data), np.max(x.data))
+
 	if gen.useCUDA:
 		gen.cuda()
 		Zinit = Variable(torch.randn(x.size(0),nz).cuda(), requires_grad=True)
@@ -88,7 +90,8 @@ def find_z(gen, x, nz, lr, exDir, maxEpochs=100):
 
 	#visualise the final output
 	xHAT = gen.forward(Zinit)
-	save_image(xHAT.data, join(exDir, 'rec.png'))
+	prtin('xHAT.data min and max:', np.min(xHAT.data), np.max(xHAT.data))
+	save_image(xHAT.data+0.5, join(exDir, 'rec.png'))
 
 	return Zinit
 
