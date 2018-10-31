@@ -63,27 +63,33 @@ if __name__=='__main__':
 	# Get men with glasses
 	idx_men_w_glasses = np.argwhere(torch.prod(y.data==torch.Tensor([1,1]), dim=1))[0]
 	img_men_w_glasses = x[idx_men_w_glasses[:10]]
-	save_image(img_men_w_glasses.data+0.5, join(exDir,'img_men_w_glasses_original.png'))
+	save_image(img_men_w_glasses.data+0.5, join(exDir,'img_men_w_glasses_original.png'), nrow=10)
 
 
 	# Get men without glasses
 	idx_men_wout_glasses = np.argwhere(torch.prod(y.data==torch.Tensor([1,0]), dim=1))[0]
 	img_men_wout_glasses = x[idx_men_wout_glasses[:10]]
-	save_image(img_men_wout_glasses.data+0.5, join(exDir,'img_men_wout_glasses_original.png'))
+	save_image(img_men_wout_glasses.data+0.5, join(exDir,'img_men_wout_glasses_original.png'), nrow=10)
 
 
 	# Get womean without glasses
 	idx_women_wout_glasses = np.argwhere(torch.prod(y.data==torch.Tensor([0,0]), dim=1))[0]
 	img_women_wout_glasses = x[idx_women_wout_glasses[:10]]
-	save_image(img_women_wout_glasses.data+0.5, join(exDir,'img_women_wout_glasses_original.png'))
+	save_image(img_women_wout_glasses.data+0.5, join(exDir,'img_women_wout_glasses_original.png'), nrow=10)
 
-	# # Load model
-	# gen = GEN(imSize=IM_SIZE, nz=opts.nz, fSize=opts.fSize)
-	# if gen.useCUDA:
-	# 	torch.cuda.set_device(opts.gpuNo)
-	# 	gen.cuda()
-	# gen.load_params(opts.exDir, gpuNo=opts.gpuNo)
-	# print 'params loaded'
+	# Put in one batch to make inversion faster:
+	x_in = torch.cat([img_men_w_glasses, img_men_wout_glasses, img_women_wout_glasses], dim=0)
+	print(np.shape(x_in))
+	
+	# Load model
+	gen = GEN(imSize=IM_SIZE, nz=opts.nz, fSize=opts.fSize)
+	if gen.useCUDA:
+		torch.cuda.set_device(opts.gpuNo)
+		gen.cuda()
+	gen.load_params(opts.exDir, gpuNo=opts.gpuNo)
+	print 'params loaded'
+
+	z_out = find_z(gen, x_in, nz=opts.nz, lr=opts.lr, exDir=exDir, maxEpochs=100, name='')
 
 
 
