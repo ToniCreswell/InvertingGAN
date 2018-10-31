@@ -3,7 +3,7 @@ sys.path.append('../')
 
 from dataload import CELEBA, SHOES, OMNI
 from utils import make_new_folder, plot_norm_losses, save_input_args, \
-sample_z, class_loss_fn, plot_losses, corrupt, prep_data # one_hot
+sample_z, class_loss_fn, plot_losses, corrupt, prep_data, plot_log_losses # one_hot
 from models import GEN, DIS, GEN1D, DIS1D
 
 
@@ -85,6 +85,7 @@ def find_z(gen, x, nz, lr, exDir, maxEpochs=100):
 		#plot training losses
 		if e>0:
 			plot_losses(losses, exDir, e+1)
+			plot_log_losses(losses, exDir, e+1)
 
 	#visualise the final output
 	xHAT = gen.forward(Zinit)

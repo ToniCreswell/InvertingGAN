@@ -46,6 +46,23 @@ def plot_losses(losses, exDir, epochs=1, title='loss'):
 	plt.title(title)
 	fig1.savefig(join(exDir, title+'_plt.png'))
 
+def plot_log_losses(losses, exDir, epochs=1, title='log_loss'):
+	#losses should be a dictionary of losses 
+	# e.g. losses = {'loss1':[], 'loss2:'[], 'loss3':[], ... etc.}
+	fig1 = plt.figure()
+	assert epochs > 0
+	for key in losses:
+		noPoints = len(losses[key])
+		factor = float(noPoints)/epochs
+		log_losses = np.log(losses[key])
+		plt.plot(np.arange(len(losses[key]))/factor,log_losses, label=key)
+
+	plt.xlabel('epoch')
+	plt.ylabel('log loss')
+	plt.legend()
+	plt.title(title)
+	fig1.savefig(join(exDir, title+'_plt.png'))
+
 def plot_norm_losses(losses, exDir, epochs=1, title='loss'):
 	#losses should be a dictionary of losses 
 	# e.g. losses = {'loss1':[], 'loss2:'[], 'loss3':[], ... etc.}
