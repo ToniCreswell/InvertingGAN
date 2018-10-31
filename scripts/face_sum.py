@@ -109,7 +109,7 @@ if __name__=='__main__':
 		np.save(join(exDir, 'z_women_wout_glasses.npy'), z_women_wout_glasses.detach().cpu().numpy())
 
 	# face sum NOT on means
-	z_woman_w_glasses = z_man_w_glasses - z_man_wout_glasses + z_woman_wout_glasses
+	z_woman_w_glasses = z_men_w_glasses - z_men_wout_glasses + z_women_wout_glasses
 	img_woman_w_glasses = gen.forward(z_woman_w_glasses)
 	save_image(img_woman_w_glasses, join(exDir,'img_woman_w_glasses.png'), nrow=1, normalize=True)
 
