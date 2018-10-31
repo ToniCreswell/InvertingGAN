@@ -35,7 +35,7 @@ if __name__=='__main__':
 	opts = get_args()
 	opts.data = 'CELEBA'
 	opts.imSize = 64
-	opts.numSamples = 20
+	opts.numSamples = 5
 	opts.labels=['Eyeglasses', 'Smiling']
 	# opts.batchSize = 100
 
@@ -99,6 +99,9 @@ if __name__=='__main__':
 		z_men_wout_glasses = torch.Tensor(z_men_wout_glasses).cuda()
 		z_women_wout_glasses = np.load(join(exDir, 'z_not_'+opts.labels[0]+'_wout_'+opts.labels[1]+'.npy'))
 		z_women_wout_glasses = torch.Tensor(z_women_wout_glasses).cuda()
+
+		print(np.shape(z_men_w_glasses.data), np.shape(z_men_wout_glasses.data), np.shape(z_women_wout_glasses.data))
+		exit()
 	except:
 		z_out = find_z(gen, x_in, nz=opts.nz, lr=opts.lr, exDir=exDir, maxEpochs=opts.maxEpochs)
 
