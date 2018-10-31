@@ -104,9 +104,9 @@ if __name__=='__main__':
 		z_men_wout_glasses = z_out[10:20]
 		z_women_wout_glasses = z_out[10:]
 
-		np.save(join(exDir, 'z_men_w_glasses.npy'), z_men_w_glasses.cpu().numpy())
-		np.save(join(exDir, 'z_men_wout_glasses.npy'), z_men_wout_glasses.cpu().numpy())
-		np.save(join(exDir, 'z_women_wout_glasses.npy'), z_women_wout_glasses.cpu().numpy())
+		np.save(join(exDir, 'z_men_w_glasses.npy'), z_men_w_glasses.detatch().cpu().numpy())
+		np.save(join(exDir, 'z_men_wout_glasses.npy'), z_men_wout_glasses.detatch().cpu().numpy())
+		np.save(join(exDir, 'z_women_wout_glasses.npy'), z_women_wout_glasses.detatch().cpu().numpy())
 
 	z_mean_man_w_glasses = torch.mean(z_men_w_glasses, dim=0, keepdim=True)
 	z_mean_man_wout_glasses = torch.mean(z_men_wout_glasses, dim=0, keepdim=True)
