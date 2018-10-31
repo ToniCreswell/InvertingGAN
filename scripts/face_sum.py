@@ -90,7 +90,7 @@ if __name__=='__main__':
 	gen.load_params(opts.exDir, gpuNo=opts.gpuNo)
 	print 'params loaded'
 
-	z_out = find_z(gen, x_in, nz=opts.nz, lr=opts.lr, exDir=exDir, maxEpochs=100, name='')
+	z_out = find_z(gen, x_in, nz=opts.nz, lr=opts.lr, exDir=exDir, maxEpochs=opts.maxEpochs)
 
 
 
