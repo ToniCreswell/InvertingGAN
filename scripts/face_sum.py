@@ -35,7 +35,7 @@ if __name__=='__main__':
 	opts = get_args()
 	opts.data = 'CELEBA'
 	opts.imSize = 64
-	opts.numSamples = 10
+	opts.numSamples = 50
 	# opts.batchSize = 100
 
 	#Create new subfolder for saving results and training params
