@@ -59,7 +59,7 @@ if __name__=='__main__':
 
 	# Get the data:
 	data = iter(testLoader).next()
-	x, y = prep_data(data, useCUDA=False)#gen.useCUDA)
+	x, y = prep_data(data, useCUDA=gen.useCUDA)
 	
 	# Get men with glasses
 	idx_men_w_glasses = np.argwhere(torch.prod(y.data==torch.Tensor([1,1]), dim=1))[0]
