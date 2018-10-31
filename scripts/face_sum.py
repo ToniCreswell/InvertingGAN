@@ -136,6 +136,6 @@ if __name__=='__main__':
 	# Womean + the mean vector:
 	z_women_w_mean_glasses = z_mean_man_w_glasses - z_mean_man_wout_glasses + z_women_wout_glasses
 	img_women_w_mean_glasses = gen.forward(z_women_w_mean_glasses)
-	save_image(img_women_w_mean_glasses, join(exDir,'img_mean_not_'+opts.labels[0]+'_w_mean_'+opts.labels[1]+'.png'), nrow=1, normalize=True)
+	save_image(img_women_w_mean_glasses, join(exDir,'img_mean_not_'+opts.labels[0]+'_w_mean_'+opts.labels[1]+'.png'), nrow=10, normalize=True)
 
 
