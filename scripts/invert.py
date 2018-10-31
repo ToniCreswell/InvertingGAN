@@ -52,13 +52,13 @@ def get_args():
 	return parser.parse_args()
 
 
-def find_z(gen, x, nz, lr, exDir, maxEpochs=100, name=''):
+def find_z(gen, x, nz, lr, exDir, maxEpochs=100):
 
 	#generator in eval mode
 	gen.eval()
 
 	#save the "original" images
-	save_image(x.data, join(exDir, name+'original.png'), normalize=True)
+	save_image(x.data, join(exDir, 'original.png'), normalize=True)
 
 	if gen.useCUDA:
 		gen.cuda()
@@ -88,7 +88,7 @@ def find_z(gen, x, nz, lr, exDir, maxEpochs=100, name=''):
 
 	#visualise the final output
 	xHAT = gen.forward(Zinit)
-	save_image(xHAT.data, join(exDir, name+'rec.png'))
+	save_image(xHAT.data, join(exDir, 'rec.png'))
 
 	return Zinit
 
