@@ -36,7 +36,7 @@ if __name__=='__main__':
 	opts.data = 'CELEBA'
 	opts.imSize = 64
 	opts.numSamples = 10
-	opts.labels=['Glasses', 'Male']
+	opts.labels=['Eyeglasses', 'Male']
 	# opts.batchSize = 100
 
 	#Create new subfolder for saving results and training params
