@@ -108,17 +108,29 @@ if __name__=='__main__':
 		np.save(join(exDir, 'z_men_wout_glasses.npy'), z_men_wout_glasses.detach().cpu().numpy())
 		np.save(join(exDir, 'z_women_wout_glasses.npy'), z_women_wout_glasses.detach().cpu().numpy())
 
+	# face sum NOT on means
+	z_woman_w_glasses = z_man_w_glasses - z_man_wout_glasses + z_woman_wout_glasses
+	img_woman_w_glasses = gen.forward(z_woman_w_glasses)
+	save_image(img_woman_w_glasses, join(exDir,'img_woman_w_glasses.png'), nrow=1, normalize=True)
+
+	# face sum ON means
 	z_mean_man_w_glasses = torch.mean(z_men_w_glasses, dim=0, keepdim=True)
 	z_mean_man_wout_glasses = torch.mean(z_men_wout_glasses, dim=0, keepdim=True)
 	z_mean_woman_wout_glasses = torch.mean(z_women_wout_glasses, dim=0, keepdim=True)
 
+	z_mean_woman_w_glasses = z_mean_man_w_glasses - z_mean_man_wout_glasses + z_mean_woman_wout_glasses
+
 	img_mean_man_w_glasses = gen.forward(z_mean_man_w_glasses)
 	img_mean_man_wout_glasses = gen.forward(z_mean_man_wout_glasses)
 	img_mean_woman_wout_glasses = gen.forward(z_mean_woman_wout_glasses)
+	img_mean_woman_w_glasses = gen.forward(z_mean_woman_w_glasses)
 
 	save_image(img_mean_man_w_glasses, join(exDir,'img_mean_man_w_glasses.png'), nrow=1, normalize=True)
 	save_image(img_mean_man_wout_glasses, join(exDir,'img_mean_man_wout_glasses.png'), nrow=1, normalize=True)
 	save_image(img_mean_woman_wout_glasses, join(exDir,'img_mean_woman_wout_glasses.png'), nrow=1, normalize=True)
+	save_image(img_mean_woman_w_glasses, join(exDir,'img_mean_woman_w_glasses.png'), nrow=1, normalize=True)
+
+
 
 
 
