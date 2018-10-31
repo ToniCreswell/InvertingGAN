@@ -125,9 +125,9 @@ if __name__=='__main__':
 	save_image(img_woman_w_glasses, join(exDir,'img_not_'+opts.labels[0]+'_w_'+opts.labels[1]+'.png'), nrow=10, normalize=True)
 
 	# face sum ON means
-	z_mean_man_w_glasses = torch.mean(z_men_w_glasses[:5], dim=0, keepdim=True)
-	z_mean_man_wout_glasses = torch.mean(z_men_wout_glasses[:5], dim=0, keepdim=True)
-	z_mean_woman_wout_glasses = torch.mean(z_women_wout_glasses[:5], dim=0, keepdim=True)
+	z_mean_man_w_glasses = torch.mean(z_men_w_glasses[0,2,6,13,14,15,16], dim=0, keepdim=True)
+	z_mean_man_wout_glasses = torch.mean(z_men_wout_glasses[1,2,3,4,8,12,13], dim=0, keepdim=True)
+	z_mean_woman_wout_glasses = torch.mean(z_women_wout_glasses[4,5,7,8,14,15,19], dim=0, keepdim=True)
 
 	z_mean_woman_w_glasses = z_mean_man_w_glasses - z_mean_man_wout_glasses + z_mean_woman_wout_glasses
 
