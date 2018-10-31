@@ -65,6 +65,7 @@ if __name__=='__main__':
 		torch.cuda.set_device(opts.gpuNo)
 		gen.cuda()
 	gen.load_params(opts.exDir, gpuNo=opts.gpuNo)
+	gen.eval()
 	print 'params loaded'
 
 	# Get the data:
