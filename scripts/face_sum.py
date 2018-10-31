@@ -35,6 +35,7 @@ if __name__=='__main__':
 	opts = get_args()
 	opts.data = 'CELEBA'
 	opts.imSize = 64
+	opts.numSamples = 10
 	# opts.batchSize = 100
 
 	#Create new subfolder for saving results and training params
@@ -48,7 +49,7 @@ if __name__=='__main__':
 	save_input_args(exDir, opts)
 
 	# Load data (glasses and male labels)
-	IM_SIZE = 64
+	IM_SIZE = opts.imSize
 	print 'Prepare data loader...'
 	transform = transforms.Compose(
 		[transforms.ToPILImage(), transforms.ToTensor(), transforms.Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5))])
@@ -71,19 +72,19 @@ if __name__=='__main__':
 	
 	# Get men with glasses
 	idx_men_w_glasses = np.argwhere(torch.prod(y.data==torch.Tensor([1,1]).cuda(), dim=1))[0]
-	img_men_w_glasses = x[idx_men_w_glasses[:10]]
+	img_men_w_glasses = x[idx_men_w_glasses[:opts.numSamples]]
 	save_image(img_men_w_glasses.data, join(exDir,'img_men_w_glasses_original.png'), nrow=10, normalize=True)
 
 
 	# Get men without glasses
 	idx_men_wout_glasses = np.argwhere(torch.prod(y.data==torch.Tensor([1,0]).cuda(), dim=1))[0]
-	img_men_wout_glasses = x[idx_men_wout_glasses[:10]]
+	img_men_wout_glasses = x[idx_men_wout_glasses[:opts.numSamples]]
 	save_image(img_men_wout_glasses.data, join(exDir,'img_men_wout_glasses_original.png'), nrow=10, normalize=True)
 
 
 	# Get womean without glasses
 	idx_women_wout_glasses = np.argwhere(torch.prod(y.data==torch.Tensor([0,0]).cuda(), dim=1))[0]
-	img_women_wout_glasses = x[idx_women_wout_glasses[:10]]
+	img_women_wout_glasses = x[idx_women_wout_glasses[:opts.numSamples]]
 	save_image(img_women_wout_glasses.data, join(exDir,'img_women_wout_glasses_original.png'), nrow=10, normalize=True)
 
 	# Put in one batch to make inversion faster:
@@ -100,9 +101,9 @@ if __name__=='__main__':
 	except:
 		z_out = find_z(gen, x_in, nz=opts.nz, lr=opts.lr, exDir=exDir, maxEpochs=opts.maxEpochs)
 
-		z_men_w_glasses = z_out[:10]
-		z_men_wout_glasses = z_out[10:20]
-		z_women_wout_glasses = z_out[10:]
+		z_men_w_glasses = z_out[:opts.numSamples]
+		z_men_wout_glasses = z_out[opts.numSamples:2*opts.numSamples]
+		z_women_wout_glasses = z_out[2*opts.numSamples:]
 
 		np.save(join(exDir, 'z_men_w_glasses.npy'), z_men_w_glasses.detach().cpu().numpy())
 		np.save(join(exDir, 'z_men_wout_glasses.npy'), z_men_wout_glasses.detach().cpu().numpy())
