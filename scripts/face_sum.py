@@ -158,7 +158,7 @@ if __name__=='__main__':
 		Z_interps.append(a*Z_1 + (1-a)*Z_2)
 	Z_interps = torch.cat(Z_interps, dim=0)
 	print('interps:', np.shape(Z_interps.data))
-
+	
 	if gen.useCUDA:
 		Z_interps = Z_interps.cuda()
 
