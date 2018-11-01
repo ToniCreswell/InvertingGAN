@@ -170,7 +170,7 @@ if __name__=='__main__':
 	attribute_vector = z_mean_man_w_glasses - z_mean_man_wout_glasses
 	Z_interps = []
 	for a in np.linspace(0.0, 1.0, num=10):
-		Z_interps.append(z_women_wout_glasses.detach().cpu() + a*attribute_vector.detach().cpu())
+		Z_interps.append((z_women_wout_glasses.detach().cpu() + a*attribute_vector.detach().cpu())[:opts.numSamples])
 	Z_interps = torch.cat(Z_interps, dim=0)
 	print(opts.labels[1]+'_interps:', np.shape(Z_interps.data))
 
