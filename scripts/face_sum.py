@@ -173,6 +173,8 @@ if __name__=='__main__':
 		Z_interps.append(Z_1 + a*Z_2)
 	Z_interps = torch.cat(Z_interps, dim=0)
 	print(opts.labels[1]+'_interps:', np.shape(Z_interps.data))
+	x_interps = gen.forward(Z_interps)
+	save_image(x_interps, join(exDir, opts.labels[1]+'_interps.png'), nrow=10, normalize=True)
 
 
 
