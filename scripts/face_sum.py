@@ -97,9 +97,9 @@ if __name__=='__main__':
 		z_men_w_glasses = np.load(join(exDir, 'z_'+opts.labels[0]+'_w_'+opts.labels[1]+'.npy'))
 		z_men_w_glasses = torch.Tensor(z_men_w_glasses).cuda()[[0,2,4,5,6,7,8,9]]
 		z_men_wout_glasses = np.load(join(exDir, 'z_'+opts.labels[0]+'_wout_'+opts.labels[1]+'.npy'))
-		z_men_wout_glasses = torch.Tensor(z_men_wout_glasses).cuda()[:8]
+		z_men_wout_glasses = torch.Tensor(z_men_wout_glasses).cuda()
 		z_women_wout_glasses = np.load(join(exDir, 'z_not_'+opts.labels[0]+'_wout_'+opts.labels[1]+'.npy'))
-		z_women_wout_glasses = torch.Tensor(z_women_wout_glasses).cuda()[[10,14,16,17,25,29,30,32]]
+		z_women_wout_glasses = torch.Tensor(z_women_wout_glasses).cuda()
 
 		# print(np.shape(z_men_w_glasses.data), np.shape(z_men_wout_glasses.data), np.shape(z_women_wout_glasses.data))
 	except:
@@ -119,10 +119,10 @@ if __name__=='__main__':
 	save_image(gen.forward(z_men_wout_glasses).data, join(exDir,'img_'+opts.labels[0]+'_wout_'+opts.labels[1]+'_rec.png'), nrow=10, normalize=True)
 	save_image(gen.forward(z_women_wout_glasses).data, join(exDir,'img_not_'+opts.labels[0]+'_wout_'+opts.labels[1]+'_rec.png'), nrow=10, normalize=True)
 
-	# face sum NOT on means
-	z_woman_w_glasses = z_men_w_glasses - z_men_wout_glasses + z_women_wout_glasses
-	img_woman_w_glasses = gen.forward(z_woman_w_glasses)
-	save_image(img_woman_w_glasses, join(exDir,'img_not_'+opts.labels[0]+'_w_'+opts.labels[1]+'.png'), nrow=10, normalize=True)
+	# # face sum NOT on means
+	# z_woman_w_glasses = z_men_w_glasses - z_men_wout_glasses + z_women_wout_glasses
+	# img_woman_w_glasses = gen.forward(z_woman_w_glasses)
+	# save_image(img_woman_w_glasses, join(exDir,'img_not_'+opts.labels[0]+'_w_'+opts.labels[1]+'.png'), nrow=10, normalize=True)
 
 	# face sum ON means
 	z_mean_man_w_glasses = torch.mean(z_men_w_glasses, dim=0, keepdim=True)
