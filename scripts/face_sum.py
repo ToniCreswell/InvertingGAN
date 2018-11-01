@@ -160,8 +160,8 @@ if __name__=='__main__':
 	Z_interps = []
 	for a in np.linspace(0.0, 1.0, num=10):
 		Z_interps.append(a*Z_1 + (1-a)*Z_2)
-	print('interps:', np.shape(Z_interps.data))
 	Z_interps = torch.cat(Z_interps, dim=0)
+	print('interps:', np.shape(Z_interps.data))
 
 	x_interps = gen.forward(Z_interps)
 	save_image(x_interps, join(exDir, 'interps.png'), nrow=10, normalize=True)
