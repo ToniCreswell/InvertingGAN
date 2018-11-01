@@ -35,7 +35,7 @@ if __name__=='__main__':
 	opts = get_args()
 	opts.data = 'CELEBA'
 	opts.imSize = 64
-	opts.numSamples = 7
+	opts.numSamples = 10
 	opts.labels=['Male', 'Eyeglasses']
 	# opts.batchSize = 100
 
@@ -146,5 +146,31 @@ if __name__=='__main__':
 	z_women_w_mean_glasses = z_mean_man_w_glasses - z_mean_man_wout_glasses + z_women_wout_glasses
 	img_women_w_mean_glasses = gen.forward(z_women_w_mean_glasses)
 	save_image(img_women_w_mean_glasses, join(exDir,'img_not_'+opts.labels[0]+'_w_mean_'+opts.labels[1]+'.png'), nrow=10, normalize=True)
+
+
+	#### Do some interpolations for fun!
+	if gen.useCUDA:
+		gen.cuda()
+		Z_1 = Variable(torch.randn(opts.numSamples,opts.nz).cuda())
+		Z_2 = Variable(torch.randn(opts.numSamples,opts.nz).cuda())
+	else:
+		Z_1 = Variable(torch.randn(opts.numSamples,opts.nz))
+		Z_2 = Variable(torch.randn(opts.numSamples,opts.nz))
+
+	Z_interps = []
+	for a in np.linspace(0.0, 1.0, num=10)
+		Z_interps.append(a*Z_1 + (1-a)*Z_2)
+	print('interps:', np.shape(Z_interps.data))
+
+	x_interps = gen.forward(Z_interps)
+	save_image(x_interps, join(exDir, 'interps.png'), nrow=10, normalize=True)
+
+
+
+
+
+
+
+
 
 
