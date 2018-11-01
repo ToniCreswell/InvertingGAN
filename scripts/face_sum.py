@@ -35,7 +35,7 @@ if __name__=='__main__':
 	opts = get_args()
 	opts.data = 'CELEBA'
 	opts.imSize = 64
-	opts.numSamples = 50
+	opts.numSamples = 7
 	opts.labels=['Male', 'Eyeglasses']
 	# opts.batchSize = 100
 
