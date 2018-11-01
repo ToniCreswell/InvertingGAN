@@ -36,7 +36,7 @@ if __name__=='__main__':
 	opts.data = 'CELEBA'
 	opts.imSize = 64
 	opts.numSamples = 10
-	opts.labels=['Male', 'Eyeglasses']
+	opts.labels=['Male', 'Smiling']
 	# opts.batchSize = 100
 
 	#Create new subfolder for saving results and training params
@@ -158,12 +158,21 @@ if __name__=='__main__':
 		Z_interps.append(a*Z_1 + (1-a)*Z_2)
 	Z_interps = torch.cat(Z_interps, dim=0)
 	print('interps:', np.shape(Z_interps.data))
-	
+
 	if gen.useCUDA:
 		Z_interps = Z_interps.cuda()
 
 	x_interps = gen.forward(Z_interps)
 	save_image(x_interps, join(exDir, 'interps.png'), nrow=10, normalize=True)
+
+
+	#### Do some interpolations along speciffic axis e.g.smiling!
+	attribute_vector = z_mean_man_w_glasses - z_mean_man_wout_glasses
+	Z_interps = []
+	for a in np.linspace(0.0, 1.0, num=10):
+		Z_interps.append(Z_1 + a*Z_2)
+	Z_interps = torch.cat(Z_interps, dim=0)
+	print(opts.labels[1]+'_interps:', np.shape(Z_interps.data))
 
 
 
