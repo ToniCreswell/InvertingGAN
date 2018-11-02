@@ -99,7 +99,7 @@ if __name__=='__main__':
 		z_men_wout_glasses = np.load(join(exDir, 'z_'+opts.labels[0]+'_wout_'+opts.labels[1]+'.npy'))
 		z_men_wout_glasses = torch.Tensor(z_men_wout_glasses).cuda()[[1,3,5]]#[[1,3,5]]#[[3,4,5,9,12,13,16,20,22,23,26,32,33]]
 		z_women_wout_glasses = np.load(join(exDir, 'z_not_'+opts.labels[0]+'_wout_'+opts.labels[1]+'.npy'))
-		z_women_wout_glasses = torch.Tensor(z_women_wout_glasses).cuda()#[[0,4,5,6,7,10,14,15,16,18]]
+		z_women_wout_glasses = torch.Tensor(z_women_wout_glasses).cuda()[[3,4,8,9]]
 
 		# print(np.shape(z_men_w_glasses.data), np.shape(z_men_wout_glasses.data), np.shape(z_women_wout_glasses.data))
 	except:
