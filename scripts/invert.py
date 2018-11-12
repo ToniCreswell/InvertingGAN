@@ -192,6 +192,7 @@ if __name__=='__main__':
 
 	###### Create model and load parameters #####
 	if gen.useCUDA:
+		print('Settgin cuda device')
 		torch.cuda.set_device(opts.gpuNo)
 		gen.cuda()
 	gen.load_params(opts.exDir, gpuNo=opts.gpuNo)
