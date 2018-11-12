@@ -122,7 +122,8 @@ def find_batch_z(gen, x, nz, lr, exDir, maxEpochs=100, alpha=1e-6, batchNo=0):
 		recLoss = F.mse_loss(xHAT, x)
 
 		#loss to make sure z's are Guassian
-		logProb = pdf.log_prob(Zinit.cuda()).mean(dim=1)  #each element of Z is independant, so likelihood is a sum of log of elements
+		print('Zinit type:', type(Zinit))
+		logProb = pdf.log_prob(Zinit).mean(dim=1)  #each element of Z is independant, so likelihood is a sum of log of elements
 		loss = recLoss - (alpha * logProb.mean())
 		
 
