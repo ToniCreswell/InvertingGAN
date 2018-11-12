@@ -106,10 +106,13 @@ def find_batch_z(gen, x, nz, lr, exDir, maxEpochs=100, alpha=1e-6, batchNo=0):
 	pdf = torch.distributions.Normal(0, 1)
 
 	if gen.useCUDA:
+		'USE CUDA FOR Zinit'
 		gen.cuda()
-		Zinit = Variable(torch.randn(x.size(0),opts.nz).cuda(), requires_grad=True)
+		Zinit = Variable(torch.randn(x.size(0),opts.nz, dtype=torch.FloatTensor).cuda(), requires_grad=True)
 	else:
 		Zinit = Variable(torch.randn(x.size(0),opts.nz), requires_grad=True)
+
+	print('Zinit type:', type(Zinit))
 
 	#optimizer
 	optZ = torch.optim.RMSprop([Zinit], lr=lr)
@@ -118,6 +121,7 @@ def find_batch_z(gen, x, nz, lr, exDir, maxEpochs=100, alpha=1e-6, batchNo=0):
 	for e in range(maxEpochs):
 
 		#reconstruction loss
+		print('Zinit type:', type(Zinit))
 		xHAT = gen.forward(Zinit)
 		recLoss = F.mse_loss(xHAT, x)
 
