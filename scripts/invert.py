@@ -113,7 +113,7 @@ def find_batch_z(gen, x, nz, lr, exDir, maxEpochs=100, alpha=1e-6, batchNo=0):
 	else:
 		Zinit = Variable(torch.randn(x.size(0),opts.nz), requires_grad=True)
 
-	print('Zinit type:', type(Zinit))
+	print('Zinit type:', type(Zinit.data))
 
 	#optimizer
 	optZ = torch.optim.RMSprop([Zinit], lr=lr)
