@@ -109,8 +109,7 @@ def find_batch_z(gen, x, nz, lr, exDir, maxEpochs=100, alpha=1e-6, batchNo=0):
 
 	if gen.useCUDA:
 		print('USE CUDA FOR Zinit')
-		gen.cuda()
-		Zinit = Variable(torch.randn(x.size(0),opts.nz, dtype=torch.float).cuda(), requires_grad=True)
+		Zinit = Variable(torch.randn(x.size(0),opts.nz, dtype=torch.float).cuda(), requires_grad=True).cuda()
 	else:
 		Zinit = Variable(torch.randn(x.size(0),opts.nz), requires_grad=True)
 
