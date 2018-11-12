@@ -105,6 +105,8 @@ def find_batch_z(gen, x, nz, lr, exDir, maxEpochs=100, alpha=1e-6, batchNo=0):
 	#Assume the prior is Standard Normal
 	pdf = torch.distributions.Normal(0, 1)
 
+	print('gen.useCUDA:', gen.useCUDA)
+
 	if gen.useCUDA:
 		'USE CUDA FOR Zinit'
 		gen.cuda()
