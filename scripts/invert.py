@@ -108,7 +108,7 @@ def find_batch_z(gen, x, nz, lr, exDir, maxEpochs=100, alpha=1e-6, batchNo=0):
 	print('gen.useCUDA:', gen.useCUDA)
 
 	if gen.useCUDA:
-		'USE CUDA FOR Zinit'
+		print('USE CUDA FOR Zinit')
 		gen.cuda()
 		Zinit = Variable(torch.randn(x.size(0),opts.nz, dtype=torch.float).cuda(), requires_grad=True)
 	else:
@@ -192,7 +192,7 @@ if __name__=='__main__':
 
 	###### Create model and load parameters #####
 	if gen.useCUDA:
-		print('Settgin cuda device')
+		print('Setting cuda device')
 		torch.cuda.set_device(opts.gpuNo)
 		gen.cuda()
 	gen.load_params(opts.exDir, gpuNo=opts.gpuNo)
