@@ -114,8 +114,6 @@ def find_batch_z(gen, x, nz, lr, exDir, maxEpochs=100, alpha=1e-6, batchNo=0):
 
 	print('Zinit type:', type(Zinit))
 
-	exit()
-
 	#optimizer
 	optZ = torch.optim.RMSprop([Zinit], lr=lr)
 
@@ -221,8 +219,6 @@ if __name__=='__main__':
 			f.write('std of loss(one batch) %0.5f' % (stdLoss))
 			f.write('Test Data (one batch) %d' % np.shape(mseLoss)[0])
 			f.close()
-
-			exit()
 
 
 	allRec = np.concatenate(allRec)

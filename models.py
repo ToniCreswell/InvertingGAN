@@ -19,6 +19,7 @@ class GEN(nn.Module):
 		self.inSize = inSize
 
 		self.useCUDA = torch.cuda.is_available()
+		print('Creating model using CUDA')
 
 		self.gen1 = nn.Linear(nz, (fSize * 8) * inSize * inSize)
 		self.gen2 = nn.ConvTranspose2d(fSize * 8, fSize * 4, 4, stride=2, padding=1, bias=False)
