@@ -114,6 +114,8 @@ def find_batch_z(gen, x, nz, lr, exDir, maxEpochs=100, alpha=1e-6, batchNo=0):
 
 	print('Zinit type:', type(Zinit))
 
+	exit()
+
 	#optimizer
 	optZ = torch.optim.RMSprop([Zinit], lr=lr)
 
