@@ -117,7 +117,6 @@ def find_batch_z(gen, x, nz, lr, exDir, maxEpochs=100, alpha=1e-6, batchNo=0):
 	for e in range(maxEpochs):
 
 		#reconstruction loss
-		print('Zinit type:', type(Zinit))
 		xHAT = gen.forward(Zinit)
 		recLoss = F.mse_loss(xHAT, x)
 
