@@ -105,6 +105,7 @@ class DIS(nn.Module):
 		d = lrelu(self.dis4b(self.dis4(d)))
 		d = d.view(x.size(0), -1)
 		if self.WGAN:
+			# d = self.dis5(d)
 			return d
 		else:
 			d = F.sigmoid(self.dis5(d)) 

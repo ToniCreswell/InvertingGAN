@@ -49,11 +49,13 @@ def get_args():
 	parser.add_argument('--useNoise', action='store_true')
 	parser.add_argument('--pi', default=0.5, type=float)
 	parser.add_argument('--WGAN', action='store_true')
+	parser.add_argument('--c', default=0.01, type=float) # weight clipping for WGAN
+	parser.add_argument('--k', default=1, type=float) # Number of updates on discriminator before generator is updated. 
 
 	return parser.parse_args()
 
 
-def train_mode(gen, dis, useNoise=False, beta1=0.5, WGAN=False):
+def train_mode(gen, dis, trainLoader, useNoise=False, beta1=0.5, c=0.01, k=1, WGAN=False):
 	####### Define optimizer #######
 	genOptimizer = optim.Adam(gen.parameters(), lr=opts.lr, betas=(beta1, 0.999))
 	disOptimizer = optim.Adam(dis.parameters(), lr=opts.lr, betas=(beta1, 0.999))
@@ -85,31 +87,49 @@ def train_mode(gen, dis, useNoise=False, beta1=0.5, WGAN=False):
 		T = time()
 		for i, data in enumerate(trainLoader, 0):
 
-			# add a small amount of corruption to the data
-			xReal = Variable(data[0])
-			if gen.useCUDA:
-				xReal = xReal.cuda()
+			for _ in range(k):
+				# add a small amount of corruption to the data
+				xReal = Variable(data[0])
+				if gen.useCUDA:
+					xReal = xReal.cuda()
 
-			if useNoise:
-				xReal = corrupt(xReal, noiseLevel) #add a little noise
+				if useNoise:
+					xReal = corrupt(xReal, noiseLevel) #add a little noise
 
 
-			####### Calculate discriminator loss #######
-			noSamples = xReal.size(0)
-			xFake = gen.sample_x(noSamples)
-			if useNoise:
-				xFake = corrupt(xFake, noiseLevel) #add a little noise
-			pReal_D = dis.forward(xReal)
-			pFake_D = dis.forward(xFake.detach())
+				####### Calculate discriminator loss #######
+				noSamples = xReal.size(0)
 
-			real = dis.ones(xReal.size(0))
-			fake = dis.zeros(xFake.size(0))
+				xFake = gen.sample_x(noSamples)
+				if useNoise:
+					xFake = corrupt(xFake, noiseLevel) #add a little noise
+				pReal_D = dis.forward(xReal)
+				pFake_D = dis.forward(xFake.detach())
 
-			if WGAN:
-				disLoss = pFake_D.mean() - pReal_D.mean()
-			else:
-				disLoss = opts.pi * F.binary_cross_entropy(pReal_D, real) + \
-						(1 - opts.pi) * F.binary_cross_entropy(pFake_D, fake)
+				real = dis.ones(xReal.size(0))
+				fake = dis.zeros(xFake.size(0))
+
+				if WGAN:
+					disLoss = pFake_D.mean() - pReal_D.mean()
+				else:
+					disLoss = opts.pi * F.binary_cross_entropy(pReal_D, real) + \
+							(1 - opts.pi) * F.binary_cross_entropy(pFake_D, fake)
+
+
+				####### Do DIS updates #######
+				disOptimizer.zero_grad()
+				disLoss.backward()
+				disOptimizer.step()
+
+			
+				#### clip DIS weights #### YM
+				if WGAN:
+					for p in dis.parameters():
+						p.data.clamp_(-c, c)
+
+
+				losses['dis'].append(disLoss.data[0])
+
 
 			####### Calculate generator loss #######
 			xFake_ = gen.sample_x(noSamples)
@@ -122,23 +142,19 @@ def train_mode(gen, dis, useNoise=False, beta1=0.5, WGAN=False):
 			else:
 				genLoss = F.binary_cross_entropy(pFake_G, real)
 
-			####### Do DIS updates #######
-			disOptimizer.zero_grad()
-			disLoss.backward()
-			disOptimizer.step()
-
+			
 			####### Do GEN updates #######
 			genOptimizer.zero_grad()
 			genLoss.backward()
 			genOptimizer.step()
 
 			losses['gen'].append(genLoss.data[0])
-			losses['dis'].append(disLoss.data[0])
-
+			
 			####### Print info #######
 			if i%100==1:
 				print '[%d, %d] gen: %.5f, dis: %.5f, time: %.2f' \
 					% (e, i, genLoss.data[0], disLoss.data[0], time()-T)
+
 
 		####### Tests #######
 		gen.eval()
@@ -180,5 +196,5 @@ if __name__=='__main__':
 	gen = GEN(imSize=IM_SIZE, nz=opts.nz, fSize=opts.fSize)
 	dis = DIS(imSize=IM_SIZE, fSize=opts.fSize, WGAN=opts.WGAN)
 
-	gen, dis = train_mode(gen, dis, useNoise=opts.useNoise, beta1=0.5, WGAN=opts.WGAN)
+	gen, dis = train_mode(gen, dis, trainLoader, useNoise=opts.useNoise, beta1=0.5, c=opts.c, k=opts.k, WGAN=opts.WGAN)
 
